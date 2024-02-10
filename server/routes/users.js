@@ -18,3 +18,6 @@ router.get("/find/:id", getUser);
 
 // Delete User
 router.delete("/:id", verifyToken, deleteUser);
+
+// Follow
+router.put("/follow/:id", verifyToken, follow);
