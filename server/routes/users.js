@@ -12,3 +12,6 @@ const router = express.Router();
 
 // Update User
 router.put("/:id", verifyToken, update);
+
+// Get User
+router.get("/find/:id", getUser);
