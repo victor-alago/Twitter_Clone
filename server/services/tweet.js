@@ -31,3 +31,25 @@ export const deleteTweet = async (req, res, next) => {
         next(err);
     }
 };
+
+
+//space for like and unlike tweet -- Caleb
+
+// space for get all timeline tweets -- Caleb
+
+// space for get only user timeline tweets -- Caleb
+
+
+//getting tweets for explore page which are trending tweets
+export const getExploreTweets = async (req, res, next) => {
+    try{
+
+        const getExploreTweets = await Tweet.find({ 
+            likes: {$exists: true }}).sort({ likes: -1 }).limit(10); //trending tweets
+
+        res.status(200).json(getExploreTweets);
+    } catch(err){
+        next(err);
+    }
+};
+
