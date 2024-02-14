@@ -92,8 +92,6 @@ const getTimelineTweets = async (req, res, next) => {
     }
 };
 
-// space for get only user timeline tweets -- Caleb
-
 
 //getting tweets for explore page which are trending tweets
 export const getExploreTweets = async (req, res, next) => {
@@ -106,5 +104,25 @@ export const getExploreTweets = async (req, res, next) => {
     } catch(err){
         next(err);
     }
+};
+
+// bookmark a tweet
+const bookmarkTweet = async (req, res, next) => {
+    try{
+        const tweet = await Tweet.findById(req.params.id);
+        if (!tweet.bookmarks.includes(req.user.username)){
+            await tweet.updateOne({$push: {bookmarks: req.user.username}});
+            res.status(200).json("Tweet bookmarked!");
+        }
+        else{
+            await tweet.updateOne({$pull: {bookmarks: req.user.username}});
+            res.status(200).json("Tweet removed from bookmarks!");
+        }
+    } catch(err){
+        return next(handleError(500, "Tweet not found!"));
+    
+    }
+    
+
 };
 
