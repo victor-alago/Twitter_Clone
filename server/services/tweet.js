@@ -1,5 +1,5 @@
-import Tweet from '../models/tweet.js';
-import User from '../models/user.js';
+import Tweet from '../models/Tweet.js';
+import User from '../models/User.js';
 import { handleError } from '../error.js';
 
 
@@ -33,9 +33,64 @@ export const deleteTweet = async (req, res, next) => {
 };
 
 
-//space for like and unlike tweet -- Caleb
+// like or dislike a tweet
+const likeOrDislike = async (req, res, next) => {
+    try{
+        const tweet = await Tweet.findById(req.params.id);
+        if (!tweet.likes.includes(req.user.username)){
+            await tweet.updateOne({$push: {likes: req.user.username}});
+            res.status(200).json("Tweet liked!");
+        }
+        else{
+            await tweet.updateOne({$pull: {likes: req.user.username}});
+            res.status(200).json("Tweet disliked!");
+        }
+    } catch(err){
+        return next(handleError(500, "Tweet not found!"));
+    
+    }
+};
 
-// space for get all timeline tweets -- Caleb
+// retweet a tweet
+const retweetUnretweet = async (req, res, next) => {
+    try{
+        const tweet = await Tweet.findById(req.params.id);
+        if (!tweet.retweets.includes(req.user.username)){
+            await tweet.updateOne({$push: {retweets: req.user.username}});
+            res.status(200).json("Tweet retweeted!");
+        }
+        else{
+            await tweet.updateOne({$pull: {retweets: req.user.username}});
+            res.status(200).json("Tweet unretweeted!");
+        }
+    } catch(err){
+        return next(handleError(500, "Tweet not found!"));
+    
+    }
+};
+
+// get timeline tweets for a user
+const getTimelineTweets = async (req, res, next) => {
+    try {
+        // get current user
+        const currentUser = await User.findOne({ username: req.user.username });
+        if (!currentUser) {
+            return res.status(404).json({ error: "User not found!" });
+        }
+
+        // get user's tweets
+        const userTweets = await Tweet.find({ username: currentUser.username }).sort({ createdAt: -1 });
+
+        // get user's following tweets
+        const followingTweets = await Tweet.find({ username: { $in: currentUser.following } }).sort({ createdAt: -1 });
+
+        // return all tweets
+        const allTweets = userTweets.concat(followingTweets);
+        res.status(200).json(allTweets);
+    } catch (err) {
+        return next(handleError(500, err.message));
+    }
+};
 
 // space for get only user timeline tweets -- Caleb
 
