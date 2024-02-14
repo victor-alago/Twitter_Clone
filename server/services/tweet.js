@@ -98,7 +98,7 @@ export const getExploreTweets = async (req, res, next) => {
     try{
 
         const getExploreTweets = await Tweet.find({ 
-            likes: {$exists: true }}).sort({ likes: -1 }).limit(10); //trending tweets
+            likes: {$exists: true }}).sort({ likes: -1 }); //trending tweets
 
         res.status(200).json(getExploreTweets);
     } catch(err){
@@ -125,4 +125,17 @@ const bookmarkTweet = async (req, res, next) => {
     
 
 };
+
+// export all the functions
+export {createTweet,
+    getTweet,
+    commentTweet,
+    deleteTweet, 
+    likeOrDislike, 
+    getTimelineTweets, 
+    getUserTweets, 
+    getExploreTweets,
+    getTrending,
+    bookmarkTweet,
+    retweetUnretweet};
 
