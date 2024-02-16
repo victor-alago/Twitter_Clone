@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import LeftSideBar from '../../components/leftSideBar/LeftSideBar';
 // import RightSideBar from '../../components/rightSideBar/RightSideBar';
 import MainTweet from '../../components/mainTweet/MainTweet';
-import WhoToFollow from '../../components/whoToFollow/WhoToFollow';
+import WhoToFollow from '../../components/whoToFollow/whoToFollow';
 import { useSelector } from 'react-redux';
 import Login from '../Login/Login';
 import axios from 'axios';
