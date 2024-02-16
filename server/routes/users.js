@@ -5,7 +5,7 @@ import {
   deleteUser,
   follow,
   unFollow,
-} from "../services/user.js";
+} from "../services/user.service.js";
 import { verifyToken } from "../verifyToken.js";
 
 const router = express.Router();
