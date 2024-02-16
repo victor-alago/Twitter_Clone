@@ -1,32 +1,28 @@
 import express from "express";
-import { verifyToken } from "../verifyToken.js";
 import {
-  createTweet,
-  deleteTweet,
-  likeOrDislike,
-  getAllTweets,
-  getUserTweets,
-  getExploreTweets,
-} from "../controllers/tweet.js";
+  getUser,
+  update,
+  deleteUser,
+  follow,
+  unFollow,
+} from "../controllers/user.js";
+import { verifyToken } from "../verifyToken.js";
 
 const router = express.Router();
 
-// Create a Tweet
-router.post("/", verifyToken, createTweet);
+// Update User
+router.put("/:id", verifyToken, update);
 
-// Delete a Tweet
-router.delete("/:id", verifyToken, deleteTweet);
+// Get User
+router.get("/find/:id", getUser);
 
-// Like or Dislike a Tweet
-router.put("/:id/like", likeOrDislike);
+// Delete User
+router.delete("/:id", verifyToken, deleteUser);
 
-// Get all timeline tweets
-router.get("/timeline/:id", getAllTweets);
+// Follow
+router.put("/follow/:id", verifyToken, follow);
 
-// Get user Tweets only
-router.get("/user/all/:id", getUserTweets);
-
-// Explore
-router.get("/explore", getExploreTweets);
+// Unfollow
+router.put("/unfollow/:id", verifyToken, unFollow);
 
 export default router;
