@@ -1,4 +1,4 @@
-import User from "../models/user.js";
+import User from "../models/User.js";
 import Tweet from "../models/Tweet.js";
 import { handleError } from "../error.js";
 
