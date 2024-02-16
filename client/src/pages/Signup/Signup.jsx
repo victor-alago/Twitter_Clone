@@ -18,3 +18,26 @@ const Signup= () => {
 const dispatch = useDispatch();
 // navigate
 const navigate = useNavigate();
+
+ // handle signup function
+ const handleSignup = async (e) => {
+    // prevent default form submission
+    e.preventDefault();
+    dispatch(loginStart());
+
+    // check if password and confirm password match
+
+    // send user data to the server
+    try{
+      // use axios.post to send user data from the form state to the server
+      const res = await axios.post('/auth/signup', {firstname, lastname, username, email, password});
+      dispatch(loginSuccess(res.data));
+      // navigate to home page after successful login
+      navigate('/');      
+    }catch(err){
+      dispatch(loginFailed());
+      // console.log(err);
+    }
+    
+  
+  }
