@@ -124,8 +124,29 @@ export const bookmarkTweet = async (req, res, next) => {
     
     }
     
-
 };
+
+const getTrending = async (req, res, next) => {
+    try {
+        // Decode the hashtag from the URL parameter
+        // You hqve to decode it because it is encoded in the frontend
+        const hashtag = decodeURIComponent(req.params.word);
+
+        // get only tweets with likes, sort by highest likes
+        const exploreTweets = await Tweet.find({
+            content: { $regex: `${hashtag}`, $options: 'i' }
+        });
+
+        // return users tweets
+        res.status(200).json(exploreTweets);
+
+    } catch (err) {
+        console.log(err);
+        return next(handleError(500, "There are no tweets!"));
+    }
+};
+
+export { getTrending };
 
 
 
