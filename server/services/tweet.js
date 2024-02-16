@@ -3,6 +3,7 @@ import User from '../models/user.js';
 import { handleError } from '../error.js';
 
 
+
 //create tweet
 export const createTweet = async (req, res, next) => {
     const newTweet = new Tweet(req.body);
@@ -34,7 +35,7 @@ export const deleteTweet = async (req, res, next) => {
 
 
 // like or dislike a tweet
-const likeOrDislike = async (req, res, next) => {
+export const likeOrDislike = async (req, res, next) => {
     try{
         const tweet = await Tweet.findById(req.params.id);
         if (!tweet.likes.includes(req.user.username)){
@@ -52,7 +53,7 @@ const likeOrDislike = async (req, res, next) => {
 };
 
 // retweet a tweet
-const retweetUnretweet = async (req, res, next) => {
+export const retweetUnretweet = async (req, res, next) => {
     try{
         const tweet = await Tweet.findById(req.params.id);
         if (!tweet.retweets.includes(req.user.username)){
@@ -70,7 +71,7 @@ const retweetUnretweet = async (req, res, next) => {
 };
 
 // get timeline tweets for a user
-const getTimelineTweets = async (req, res, next) => {
+export const getTimelineTweets = async (req, res, next) => {
     try {
         // get current user
         const currentUser = await User.findOne({ username: req.user.username });
@@ -107,7 +108,7 @@ export const getExploreTweets = async (req, res, next) => {
 };
 
 // bookmark a tweet
-const bookmarkTweet = async (req, res, next) => {
+export const bookmarkTweet = async (req, res, next) => {
     try{
         const tweet = await Tweet.findById(req.params.id);
         if (!tweet.bookmarks.includes(req.user.username)){
@@ -126,16 +127,5 @@ const bookmarkTweet = async (req, res, next) => {
 
 };
 
-// export all the functions
-export {createTweet,
-    getTweet,
-    commentTweet,
-    deleteTweet, 
-    likeOrDislike, 
-    getTimelineTweets, 
-    getUserTweets, 
-    getExploreTweets,
-    getTrending,
-    bookmarkTweet,
-    retweetUnretweet};
+
 
