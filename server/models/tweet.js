@@ -1,23 +1,38 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
-const tweetSchema = new mongoose.Schema({
-        userId: {
+const tweetSchema = new mongoose.Schema(
+    {
+        username: {
             type: String,
             required: true,
         },
-        description: {
+        content: {
             type: String,
-            max: 500,
+            required: true,
+            max: 280,
+        },
+        media: {
+            type: String,
+            default: "",
         },
         likes: {
             type: Array,
-            defaultValue: [],
+            default: []
+        },
+        retweets: {
+            type: Array,
+            default: []
+        },
+        comments: {
+            type: Array,
+            default: []
+        },
+        bookmarks: {
+            type: Array,
+            default: []
         },
     },
-    { 
-        timestamps: true, 
-    }
-    
+    { timestamps: true },
 );
 
 export default mongoose.model("Tweet", tweetSchema);
