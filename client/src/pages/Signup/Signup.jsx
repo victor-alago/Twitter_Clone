@@ -41,3 +41,61 @@ const navigate = useNavigate();
     
   
   }
+
+
+  return (
+    <form className='bg-gray-200 flex flex-col py-12 px-8 rounded-lg w-8/12 md:w-6/12 mx-auto gap-10'>
+      <h2 className='text-Sxl font-bold text-center'>Create an account</h2>
+
+      <input type="text"
+        onChange={(e) => setFirstname(e.target.value)}
+        placeholder='First Name' 
+        required
+        className='text-xl py-2 px-4 rounded-full' />
+
+      <input type="text"
+        onChange={(e) => setLastname(e.target.value)} 
+        placeholder='Last Name' 
+        required
+        className='text-xl py-2 px-4 rounded-full' />
+
+      <input type="text" 
+        onChange={(e) => setUsername(e.target.value)}
+        placeholder='Username' 
+        required
+        className='text-xl py-2 px-4 rounded-full' />
+
+      <input type="email"
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder='Email' 
+        required
+        className='text-xl py-2 px-4 rounded-full' />
+
+      <input type="password" 
+        onChange={(e) => setPassword(e.target.value)}
+        placeholder='Password' 
+        required
+        className='text-xl py-2 px-4 rounded-full' />
+
+      <input type="password" 
+        onChange={(e) => setConfirmPassword(e.target.value)}
+        placeholder='Confirm Password' 
+        required
+        className='text-xl py-2 px-4 rounded-full' />
+     
+
+      <button 
+        onClick={handleSignup}
+        className='text-xl py-2 px-4 rounded-full bg-blue-500 text-white'>
+        Sign Up
+      </button>
+
+      <p>Have an account? </p> 
+      <Link to="/login">
+        <p className='text-blue-500 cursor-pointer'>Login</p>
+      </Link>
+    </form>
+    )
+}
+
+export default Signup
