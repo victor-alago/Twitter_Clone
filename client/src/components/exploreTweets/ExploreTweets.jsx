@@ -34,4 +34,4 @@ const ExploreTweets = () => {
   )
 }
 
-export default ExploreTweetss
+export default ExploreTweets
