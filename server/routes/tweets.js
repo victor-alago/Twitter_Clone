@@ -1,28 +1,30 @@
 import express from "express";
 import { verifyToken } from "../verifyToken.js";
-import { createTweet, deleteTweet, likeOrDislikeTweet, getAllTweets,getUserTweets, getExploreTweets } from "../services/tweet.js";
-
+import {
+  createTweet,
+  deleteTweet,
+  likeOrDislikeTweet,
+  getAllTweets,
+  getUserTweets,
+  getExploreTweets,
+} from "../services/tweet.service.js";
 
 const router = express.Router();
 
+router.post("/", verifyToken, createTweet);
 
-router.post('/', verifyToken, createTweet);
-
-
-router.delete('/:id', verifyToken, deleteTweet);
-
+router.delete("/:id", verifyToken, deleteTweet);
 
 //like or dislike a tweet
-router.put('/:id/like', verifyToken, likeOrDislikeTweet);
+router.put("/:id/like", verifyToken, likeOrDislikeTweet);
 
 //get all timeline tweets
-router.get('/timeline/:id', getAllTweets);
+router.get("/timeline/:id", getAllTweets);
 
 //get only the user's tweets
-router.get('/user/all/:id', getUserTweets);
-
+router.get("/user/all/:id", getUserTweets);
 
 //explore, contains all tweets from all users, most liked tweets, most retweeted tweets
-router.get('/explore', getExploreTweets); //trending tweets
+router.get("/explore", getExploreTweets); //trending tweets
 
 export default router;
