@@ -70,6 +70,25 @@ export const retweetUnretweet = async (req, res, next) => {
     }
 };
 
+
+// comment on a tweet
+const commentTweet = async (req, res, next) => {
+    const username = req.user.username;
+    const originalTweet = await Tweet.findById(req.params.id);
+    // const content = req.body.content;
+    const newTweet = new Tweet({username, ...req.body});
+    try {
+        // save new comment tweet
+        const savedTweet = await newTweet.save();
+        // add comment tweet id to original tweet comments array
+        await originalTweet.updateOne({$push: {comments: savedTweet._id}})
+        return res.status(200).json(savedTweet);
+    } catch(err){
+        return next(handleError(500, err.message))
+    }
+};
+
+
 // get timeline tweets for a user
 export const getTimelineTweets = async (req, res, next) => {
     try {
