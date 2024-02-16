@@ -2,32 +2,44 @@ import User from "../models/user.js";
 import { handleError } from "../error.js";
 import Tweet from "../models/tweet.js";
 
-export const getUser = async (req, res, next) => {
-    try {
-        const user = await User.findById(req.params.id);
-        res.status(200).json(user);
-    } catch (err) {
+// get user
+const getUser = async (req, res, next) => {
+    try{
+        // search for user by username
+        const user = await User.findOne({username: req.params.username});
+        // if user does not exist
+        if (!user){
+            return res.status(404).json({error: "User not found!"});
+        }
+        const {password, ...info} = user._doc;
+        res.status(200).json(info);
+    } catch(err){
         next(err);
     }
 };
 
-export const update = async (req, res, next) => {
-    if (req.params.id === req.user.id) {
-        try {
-            const updatedUser = await User.findByIdAndUpdate(req.params.id, {
-                $set: req.body,
-            },
-            {
-                new: true,
-            });
-            res.status(200).json(updatedUser);
-        } catch (err) {
+// update user
+const updateUser = async (req, res, next) => {
+    // check if user is updating their own account
+    if (req.params.username === req.user.username){
+        try{
+            const updatedUser = await User.findOneAndUpdate(
+                {username: req.params.username},
+                {$set: req.body},
+                {new: true}
+            );
+            const {password, ...info} = updatedUser._doc;
+
+            res.status(200).json(info);
+
+        } catch(err){
             next(err);
         }
-    } else {
-        return next(handleError(403, 'You are not authorized to update this user!'));
     }
-};
+    else{
+        return next(handleError(403, "You can only update your account!"));
+    }
+}
 
 const deleteUser = async (req, res, next) => {
     // check if user is updating their own account
