@@ -1,7 +1,8 @@
-import User from "../models/user.js";
-import bcrypt from "bcryptjs";
+import User from "../models/User.js";
+// import bcrypt from "bcryptjs";
+import CryptoJS from "crypto-js";
 import jwt from "jsonwebtoken";
-import { handleError } from "../error.js";
+import handleError from "../error.js";
 
 
 const signup =  async (req, res) => {
