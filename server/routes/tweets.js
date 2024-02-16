@@ -1,30 +1,51 @@
-import express from "express";
-import { verifyToken } from "../verifyToken.js";
-import {
-  createTweet,
-  deleteTweet,
-  likeOrDislikeTweet,
-  getAllTweets,
-  getUserTweets,
-  getExploreTweets,
-} from "../services/tweet.service.js";
+import express from 'express';
+import {createTweet,
+    getTweet,
+    deleteTweet,
+    commentTweet,
+    likeOrDislike,
+    getTimelineTweets,
+    getUserTweets,
+    getExploreTweets,
+    getTrending,
+    bookmarkTweet,
+    retweetUnretweet} from '../services/tweet.service.js';
+import verify from '../verifyToken.js';
 
-const router = express.Router();
+const router  = express.Router();
 
-router.post("/", verifyToken, createTweet);
+// create a tweet
+router.post('/', verify, createTweet);
 
-router.delete("/:id", verifyToken, deleteTweet);
+// get a tweet(not necessary to verify)
+router.get('/find/:id', getTweet);
 
-//like or dislike a tweet
-router.put("/:id/like", verifyToken, likeOrDislikeTweet);
+//delete a tweet
+router.delete('/:id', verify, deleteTweet);
 
-//get all timeline tweets
-router.get("/timeline/:id", getAllTweets);
+// comment on a tweet
+router.post('/:id/comment', verify, commentTweet);
 
-//get only the user's tweets
-router.get("/user/all/:id", getUserTweets);
+// like or dislike a tweet
+router.put('/:id/like', verify, likeOrDislike);
 
-//explore, contains all tweets from all users, most liked tweets, most retweeted tweets
-router.get("/explore", getExploreTweets); //trending tweets
+// retweet or unretweet a tweet
+router.put('/:id/retweet', verify, retweetUnretweet);
+
+// bookmark a tweet
+router.put('/:id/bookmark', verify, bookmarkTweet);
+
+// get timeline tweet (user tweets and accounts followed tweets)
+router.get('/timeline', verify, getTimelineTweets);
+
+// get one users tweets
+router.get('/:username/tweets', verify, getUserTweets);
+
+// get all tweets
+router.get('/explore/', verify, getExploreTweets);
+
+// get trending hashtags
+router.get('/search/:word', verify, getTrending);
+
 
 export default router;

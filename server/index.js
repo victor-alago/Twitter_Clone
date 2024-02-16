@@ -14,7 +14,7 @@ dotenv.config(); // get config for mongoDB
 
 const connect = () => {
     mongoose.set("strictQuery", false);
-    mongoose.connect(process.env.MONGO).then(() => {
+    mongoose.connect(process.env.MONGO_URL).then(() => {
         console.log('Connected to MongoDB');
     }).catch((err) => {
         throw err;
@@ -23,9 +23,9 @@ const connect = () => {
 
 app.use(cookieParser());
 app.use(express.json());
-app.use("/api/users", userRoutes);
-app.use("/api/auth", authRoutes);
-app.use("/api/tweets", tweetRoutes);
+app.use("/server/users", userRoutes);
+app.use("/server/auth", authRoutes);
+app.use("/server/tweets", tweetRoutes);
 
 app.listen(8000, () => {
     connect();

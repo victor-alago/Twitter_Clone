@@ -1,6 +1,6 @@
 import User from "../models/User.js";
 import Tweet from "../models/Tweet.js";
-import { handleError } from "../error.js";
+import handleError from "../error.js";
 
 // get user
 const getUser = async (req, res, next) => {
@@ -124,5 +124,28 @@ const unfollowUser = async (req, res, next) => {
     }
 };
 
-export {deleteUser, followUser, unfollowUser};
+// who to follow
+const whoToFollow = async (req, res, next) => {
+    try {
+        // Get 5 users with the most followers
+        const users = await User.find().sort({ followers: -1 }).limit(5);
+        
+        // If no users are found
+        if (!users || users.length === 0) {
+            return res.status(404).json({ error: "Users not found!" });
+        }
+
+        // Remove passwords and emails from each user
+        const sanitizedUsers = users.map(user => {
+            const { password, email, ...userInfo } = user._doc;
+            return userInfo;
+        });
+
+        res.status(200).json(sanitizedUsers);
+    } catch(err) {
+        next(err);
+    }
+}
+
+export {getUser, updateUser, deleteUser, followUser, unfollowUser, whoToFollow};
 
