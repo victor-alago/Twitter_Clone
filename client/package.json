@@ -45,5 +45,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.1"
+  },
+  "proxy": "http://localhost:8000/server"
 }
