@@ -7,7 +7,7 @@ import {
   getAllTweets,
   getUserTweets,
   getExploreTweets,
-} from "../controllers/tweet.js";
+} from "../services/user.service.js";
 
 const router = express.Router();
 
