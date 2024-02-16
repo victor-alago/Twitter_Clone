@@ -13,4 +13,8 @@ const Signup= () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    
+
+// dispatch
+const dispatch = useDispatch();
+// navigate
+const navigate = useNavigate();
