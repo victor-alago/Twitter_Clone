@@ -1,32 +1,51 @@
-import express from "express";
-import { verifyToken } from "../verifyToken.js";
-import {
-  createTweet,
-  deleteTweet,
-  likeOrDislike,
-  getAllTweets,
-  getUserTweets,
-  getExploreTweets,
-} from "../controllers/tweet.js";
+import express from 'express';
+import {createTweet,
+    getTweet,
+    deleteTweet,
+    commentTweet,
+    likeOrDislike,
+    getTimelineTweets,
+    getUserTweets,
+    getExploreTweets,
+    getTrending,
+    bookmarkTweet,
+    retweetUnretweet} from '../services/tweet.service.js';
+import verify from '../verifyToken.js';
 
-const router = express.Router();
+const router  = express.Router();
 
-// Create a Tweet
-router.post("/", verifyToken, createTweet);
+// create a tweet
+router.post('/', verify, createTweet);
 
-// Delete a Tweet
-router.delete("/:id", verifyToken, deleteTweet);
+// get a tweet(not necessary to verify)
+router.get('/find/:id', getTweet);
 
-// Like or Dislike a Tweet
-router.put("/:id/like", likeOrDislike);
+//delete a tweet
+router.delete('/:id', verify, deleteTweet);
 
-// Get all timeline tweets
-router.get("/timeline/:id", getAllTweets);
+// comment on a tweet
+router.post('/:id/comment', verify, commentTweet);
 
-// Get user Tweets only
-router.get("/user/all/:id", getUserTweets);
+// like or dislike a tweet
+router.put('/:id/like', verify, likeOrDislike);
 
-// Explore
-router.get("/explore", getExploreTweets);
+// retweet or unretweet a tweet
+router.put('/:id/retweet', verify, retweetUnretweet);
+
+// bookmark a tweet
+router.put('/:id/bookmark', verify, bookmarkTweet);
+
+// get timeline tweet (user tweets and accounts followed tweets)
+router.get('/timeline', verify, getTimelineTweets);
+
+// get one users tweets
+router.get('/:username/tweets', verify, getUserTweets);
+
+// get all tweets
+router.get('/explore/', verify, getExploreTweets);
+
+// get trending hashtags
+router.get('/search/:word', verify, getTrending);
+
 
 export default router;
