@@ -1,6 +1,8 @@
 import User from "../models/User.js";
 import Tweet from "../models/Tweet.js";
 import handleError from "../error.js";
+import CryptoJS from "crypto-js";
+
 
 // get user
 const getUser = async (req, res, next) => {
@@ -40,6 +42,40 @@ const updateUser = async (req, res, next) => {
         return next(handleError(403, "You can only update your account!"));
     }
 }
+
+
+// Update Password
+const updatePassword = async (req, res) => {
+    const { currentPassword, newPassword } = req.body;
+    const username = req.params.username;
+
+    try {
+        // Find user by username
+        const user = await User.findOne({ username: username });
+        if (!user) {
+            return res.status(404).json("User not found.");
+        }
+
+        // Decrypt the stored password
+        const decryptedCurrentPassword = CryptoJS.AES.decrypt(user.password, process.env.SECRET_KEY).toString(CryptoJS.enc.Utf8);
+
+        // Compare provided current password with decrypted password
+        if (decryptedCurrentPassword !== currentPassword) {
+            return res.status(400).json("Current password is incorrect.");
+        }
+
+        // Encrypt the new password
+        const encryptedNewPassword = CryptoJS.AES.encrypt(newPassword, process.env.SECRET_KEY).toString();
+
+        // Update the user's password with the new encrypted password
+        user.password = encryptedNewPassword;
+        await user.save();
+
+        res.status(200).json("Password updated successfully.");
+    } catch (err) {
+        res.status(500).json("Internal server error.");
+    }
+};
 
 const deleteUser = async (req, res, next) => {
     // check if user is updating their own account
@@ -147,5 +183,5 @@ const whoToFollow = async (req, res, next) => {
     }
 }
 
-export {getUser, updateUser, deleteUser, followUser, unfollowUser, whoToFollow};
+export {getUser, updateUser, deleteUser, followUser, unfollowUser, whoToFollow, updatePassword};
 

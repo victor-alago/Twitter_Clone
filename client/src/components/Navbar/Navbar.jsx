@@ -16,7 +16,9 @@ const Navbar = () => {
         return 'Profile';
     } else if (location.pathname.includes('/messages')) { // Check if the pathname includes'messages'
         return 'Messages';
-    }
+    } else if (location.pathname.includes('/setting')) { // Check if the pathname includes'messages'
+      return 'Setting';
+  }
     return 'Home'; // Default to 'Home' if neither
   };
 

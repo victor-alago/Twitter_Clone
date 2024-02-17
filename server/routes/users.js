@@ -4,7 +4,7 @@ import {getUser,
     deleteUser, 
     followUser, 
     unfollowUser,
-    whoToFollow} from '../services/user.service.js';
+    whoToFollow, updatePassword} from '../services/user.service.js';
 import verify from '../verifyToken.js';
 
 const router  = express.Router();
@@ -14,6 +14,8 @@ router.get('/find/:username', getUser);
 router.get('/find/',verify, whoToFollow);
 // update a user
 router.put('/:username', verify, updateUser);
+// update password
+router.put('/:username/password', verify, updatePassword);
 // delete a user
 router.delete('/:username', verify, deleteUser);
 // follow a user
