@@ -22,7 +22,7 @@ const Bookmark = () => {
 
                 <div className='px-6'>
                     <WhoToFollow />
-          </div>
+                </div>
             </div>
         )
     }
