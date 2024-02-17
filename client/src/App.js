@@ -5,7 +5,7 @@ import Explore from "./pages/Explore/Explore";
 import Login from "./pages/Login/Login";
 import Signup from "./pages/Signup/Signup";
 import Messages from "./pages/Messages/Messages";
-import Navbar from "./components/Navbar/Navbar";
+import Navbar from "./components/navbar/Navbar";
 import Error from "./pages/Error/Error";
 import "./App.css";
 import Tweet from "./pages/Tweet/Tweet";
