@@ -184,6 +184,24 @@ const bookmarkTweet = async (req, res, next) => {
   }
 };
 
+
+// Retrieve bookmarked tweets for a user
+const getBookmarkedTweets = async (req, res, next) => {
+  try {
+    // Use the username from the authenticated user's request
+    const username = req.user.username;
+    const bookmarkedTweets = await Tweet.find({
+      bookmarks: username // Assuming username is unique and correctly identifies the user
+    }).sort({ createdAt: -1 }); // Sort by creation time for recency
+
+    res.status(200).json(bookmarkedTweets);
+  } catch (err) {
+    // Pass the error to the next middleware (which could be an error handling middleware)
+    next(err);
+  }
+};
+
+
 const getTrending = async (req, res, next) => {
   try {
     // Decode the hashtag from the URL parameter
@@ -214,5 +232,6 @@ export {
   getUserTweets,
   getExploreTweets,
   bookmarkTweet,
-  getTimelineTweets
+  getTimelineTweets,
+  getBookmarkedTweets
 };
