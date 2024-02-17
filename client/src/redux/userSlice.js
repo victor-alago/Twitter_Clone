@@ -38,6 +38,12 @@ export const userSlice = createSlice({
       state.currentUser.bio = action.payload.bio;
     },
 
+    updateEmail: (state, action) => {
+      if (state.currentUser) {
+        state.currentUser.email = action.payload.email;
+      }
+    },
+
     followUser: (state, action) => {
       // if the username that is passed from the payload is not in the following list  of the current user
       if (state.currentUser.following.includes(action.payload)) {
@@ -54,7 +60,7 @@ export const userSlice = createSlice({
 });
 
 // export the actions
-export const { loginStart, loginSuccess, loginFailed, logout, updateProfile, followUser} =
+export const { loginStart, loginSuccess, loginFailed, logout, updateProfile, followUser, updateEmail} =
   userSlice.actions;
 
 export default userSlice.reducer;
