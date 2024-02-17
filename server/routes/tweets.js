@@ -9,6 +9,7 @@ import {createTweet,
     getExploreTweets,
     getTrending,
     bookmarkTweet,
+    getBookmarkedTweets,
     retweetUnretweet} from '../services/tweet.service.js';
 import verify from '../verifyToken.js';
 
@@ -34,6 +35,9 @@ router.put('/:id/retweet', verify, retweetUnretweet);
 
 // bookmark a tweet
 router.put('/:id/bookmark', verify, bookmarkTweet);
+
+// Get bookmarked tweets for the authenticated user
+router.get('/bookmarks', verify, getBookmarkedTweets);
 
 // get timeline tweet (user tweets and accounts followed tweets)
 router.get('/timeline', verify, getTimelineTweets);

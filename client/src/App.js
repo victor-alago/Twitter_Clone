@@ -6,6 +6,7 @@ import Login from "./pages/Login/Login";
 import Signup from "./pages/Signup/Signup";
 import Messages from "./pages/Messages/Messages";
 import Navbar from "./components/navbar/Navbar";
+import Bookmark from "./pages/Bookmark/Bookmark";
 import Error from "./pages/Error/Error";
 import "./App.css";
 import Tweet from "./pages/Tweet/Tweet";
@@ -54,6 +55,10 @@ const router = createBrowserRouter([
       {
         path: "/messages",
         element: <Messages />,
+      },
+      {
+        path: "/bookmark",
+        element: <Bookmark />,
       },
       {
         path: "/logout",
