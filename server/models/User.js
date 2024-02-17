@@ -50,7 +50,8 @@ const UserSchema = new mongoose.Schema(
             defaultValue: [] 
         },
         bio: {
-            type: String
+            type: String,
+            defaultValue: "",
         }
     },
     {timestamps: true}

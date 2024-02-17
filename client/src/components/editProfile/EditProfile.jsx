@@ -37,7 +37,7 @@ const EditProfile = ({ setOpen }) => {
         lastname: lastname,
         bio: bio,
       });
-      dispatch(updateProfile(updateUser));
+    //   dispatch(updateProfile(updateUser));
     } catch (error) {
       console.log(error);
     }
