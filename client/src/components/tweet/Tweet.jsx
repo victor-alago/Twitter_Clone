@@ -134,7 +134,7 @@ const Tweet = ({ tweet, setData }) => {
                 className="w-10 h-10 rounded-full object-cover"
                 src={
                   !userData.profilePicture
-                    ? "https://e7.pngegg.com/pngimages/442/477/png-clipart-computer-icons-user-profile-avatar-profile-heroes-profile-thumbnail.png"
+                    ? "https://twirpz.files.wordpress.com/2015/06/twitter-avi-gender-balanced-figure.png"
                     : userData.profilePicture
                 }
                 alt=""
