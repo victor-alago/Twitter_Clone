@@ -8,6 +8,7 @@ import HomeIcon from "@mui/icons-material/Home";
 import TagIcon from "@mui/icons-material/Tag";
 import PersonIcon from "@mui/icons-material/Person";
 import MailIcon from "@mui/icons-material/Mail";
+import BookmarkIcon from '@mui/icons-material/Bookmark';
 
 const LeftSideBar = () => {
   const [openModal, setOpenModal] = useState(false);
@@ -33,6 +34,12 @@ const LeftSideBar = () => {
             <div className="flex items-center space-x-6 px-2 py-2 hover:bg-slate-200 rounded-full cursor-pointer">
               <TagIcon fontSize="large" />
               <p>Explore</p>
+            </div>
+          </Link>
+          <Link to="/bookmark">
+            <div className="flex items-center space-x-6 px-2 py-2 hover:bg-slate-200 rounded-full cursor-pointer">
+              <BookmarkIcon fontSize="large" />
+              <p>Bookmark</p>
             </div>
           </Link>
           <Link to="/messages">
