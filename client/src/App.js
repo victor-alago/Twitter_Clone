@@ -10,7 +10,6 @@ import Bookmark from "./pages/Bookmark/Bookmark";
 import Error from "./pages/Error/Error";
 import Setting from "./pages/Setting/Setting";
 import AccountSetting from "./pages/Setting/AccountSetting/AccountSetting";
-import DisplaySetting from "./pages/Setting/DisplaySetting/DisplaySetting";
 import "./App.css";
 import Tweet from "./pages/Tweet/Tweet";
 
@@ -77,7 +76,6 @@ const router = createBrowserRouter([
             path: "account", 
             element: <AccountSetting />,
            },
-          { path: "display", element: <DisplaySetting /> },
         ],
       },
       {
