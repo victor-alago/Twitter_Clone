@@ -97,10 +97,10 @@ const EditProfile = ({ setOpen }) => {
   }, [file]);
 
   return (
-    <div className="absolute w-full h-full top-0 left-0 bg-blur flex items-center justify-center">
-      <div className="relative w-[500px] h-[600px] bg-slate-200 rounded-lg p-8 flex flex-col gap-4">
+    <div className="absolute w-full h-full top-0 left-0 bg-blur flex items-center justify-center pt-[100px]">
+      <div className="relative w-[500px] h-[500px] bg-slate-200 rounded-lg p-8 flex flex-col gap-4">
         <button
-          className="absolute top-3 right-3 cursor-pointer text-red-500"
+          className="absolute top-7 right-3 cursor-pointer text-red-500"
           onClick={() => setOpen(false)}
         >
           <CloseRoundedIcon />
@@ -147,14 +147,14 @@ const EditProfile = ({ setOpen }) => {
             Save
           </button>
         </div>
-        <div className="flex justify-end">
+        {/* <div className="flex justify-end">
           <button
             className="bg-red-500 text-white rounded-full px-4 py-2"
             onClick={handleDeleteUser}
           >
             Delete account
           </button>
-        </div>
+        </div> */}
         
       </div>
     </div>

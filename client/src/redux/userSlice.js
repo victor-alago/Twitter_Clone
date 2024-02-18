@@ -39,21 +39,14 @@ export const userSlice = createSlice({
         firstname: firstname,
         lastname: lastname,
         bio: bio,
-      }
+      };
     },
 
-    // followUser: (state, action) => {
-    //   // if the username that is passed from the payload is not in the following list  of the current user
-    //   if (state.currentUser.following.includes(action.payload)) {
-    //     state.currentUser.following.splice(
-    //       state.currentUser.following.findIndex(
-    //         (followingId) => followingId === action.payload
-    //       )
-    //     );
-    //   } else {
-    //     state.currentUser.following.push(action.payload);
-    //   }
-    // },
+    updateEmail: (state, action) => {
+      if (state.currentUser) {
+        state.currentUser.email = action.payload.email;
+      }
+    },
 
     followUser: (state, action) => {
       //  get username to follow or unfollow from the payload
@@ -66,21 +59,27 @@ export const userSlice = createSlice({
         ...state.currentUser,
         // update the following array based on the isFollowing value
         following: isFollowing
-        // get everyone that is not the provided username
-        ? state.currentUser.following.filter((followingId) => followingId !== username)
-        // else add the username to the following array
-        : [...state.currentUser.following, username]
-      }
+          ? // get everyone that is not the provided username
+            state.currentUser.following.filter(
+              (followingId) => followingId !== username
+            )
+          : // else add the username to the following array
+            [...state.currentUser.following, username],
+      };
     },
 
-    followUserFailed: (state, action) => {
-
-    },
   },
 });
 
 // export the actions
-export const { loginStart, loginSuccess, loginFailed, logout, updateProfile, followUser} =
-  userSlice.actions;
+export const {
+  loginStart,
+  loginSuccess,
+  loginFailed,
+  logout,
+  updateProfile,
+  followUser,
+  updateEmail,
+} = userSlice.actions;
 
 export default userSlice.reducer;

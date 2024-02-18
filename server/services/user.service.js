@@ -1,6 +1,7 @@
 import User from "../models/User.js";
 import Tweet from "../models/Tweet.js";
 import handleError from "../error.js";
+import CryptoJS from "crypto-js";
 
 // get user
 const getUser = async (req, res, next) => {
@@ -13,26 +14,6 @@ const getUser = async (req, res, next) => {
     }
     const { password, ...info } = user._doc;
     res.status(200).json(info);
-  } catch (err) {
-    next(err);
-  }
-};
-
-// search for users
-const searchUsers = async (req, res, next) => {
-  try {
-    // search for users by username
-    const users = await User.find({ username: { $regex: req.query.username } });
-    // if no users are found
-    if (!users || users.length === 0) {
-      return res.status(404).json({ error: "Users not found!" });
-    }
-    // remove passwords and emails from each user
-    const sanitizedUsers = users.map((user) => {
-      const { password, email, ...userInfo } = user._doc;
-      return userInfo;
-    });
-    res.status(200).json(sanitizedUsers);
   } catch (err) {
     next(err);
   }
@@ -56,6 +37,45 @@ const updateUser = async (req, res, next) => {
     }
   } else {
     return next(handleError(403, "You can only update your account!"));
+  }
+};
+
+// Update Password
+const updatePassword = async (req, res) => {
+  const { currentPassword, newPassword } = req.body;
+  const username = req.params.username;
+
+  try {
+    // Find user by username
+    const user = await User.findOne({ username: username });
+    if (!user) {
+      return res.status(404).json("User not found.");
+    }
+
+    // Decrypt the stored password
+    const decryptedCurrentPassword = CryptoJS.AES.decrypt(
+      user.password,
+      process.env.SECRET_KEY
+    ).toString(CryptoJS.enc.Utf8);
+
+    // Compare provided current password with decrypted password
+    if (decryptedCurrentPassword !== currentPassword) {
+      return res.status(400).json("Current password is incorrect.");
+    }
+
+    // Encrypt the new password
+    const encryptedNewPassword = CryptoJS.AES.encrypt(
+      newPassword,
+      process.env.SECRET_KEY
+    ).toString();
+
+    // Update the user's password with the new encrypted password
+    user.password = encryptedNewPassword;
+    await user.save();
+
+    res.status(200).json("Password updated successfully.");
+  } catch (err) {
+    res.status(500).json("Internal server error.");
   }
 };
 
@@ -157,19 +177,16 @@ const unfollowUser = async (req, res, next) => {
 // who to follow
 const whoToFollow = async (req, res, next) => {
   try {
-    // Get 5 users with the most followers that the current user is not following
-    const currentUser = await User.find({username: req.user.username});
-    const usersNotFollowing = await User.find({
-      username: { $nin: currentUser.following }, // Exclude users that the current user is already following
-    }).sort({ followers: -1 })  ;
+    // Get 5 users with the most followers
+    const users = await User.find().sort({ followers: -1 }).limit(5);
 
     // If no users are found
-    if (!usersNotFollowing || usersNotFollowing.length === 0) {
+    if (!users || users.length === 0) {
       return res.status(404).json({ error: "Users not found!" });
     }
 
     // Remove passwords and emails from each user
-    const sanitizedUsers = usersNotFollowing.map((user) => {
+    const sanitizedUsers = users.map((user) => {
       const { password, email, ...userInfo } = user._doc;
       return userInfo;
     });
@@ -179,7 +196,6 @@ const whoToFollow = async (req, res, next) => {
     next(err);
   }
 };
-
 
 // get liked tweets for a user
 const getLikedTweets = async (req, res, next) => {
@@ -195,66 +211,36 @@ const getLikedTweets = async (req, res, next) => {
   }
 };
 
-// // get comment tweets for a user
-// const getCommentTweets = async (req, res, next) => {
-//   try {
-//     // get user's tweet replies
-//     const repliedTweets = await Tweet.find({
-//       comments: { $in: [req.params.username] },
-//     }).sort({ createdAt: -1 });
-//     // return bookmarked tweets
-//     res.status(200).json(repliedTweets);
-//   } catch (err) {
-//     return next(handleError(500, err.message));
-//   }
-// };
-
-// get bookmarked tweets for a user
-const getBookmarkedTweets = async (req, res, next) => {
+// get user media
+const getUserMedia = async (req, res, next) => {
   try {
-    // get user's bookmarked tweets
-    const bookmarkedTweets = await Tweet.find({
-      bookmarks: { $in: [req.user.username] },
-    }).sort({ createdAt: -1 });
-    // return bookmarked tweets
-    res.status(200).json(bookmarkedTweets);
+    const userTweets = await Tweet.find({ username: req.params.username });
+
+    // Array to store all the media
+    const allMedia = [];
+
+    // Iterate over each tweet to extract media
+    userTweets.forEach((tweet) => {
+      if (tweet.media) {
+        allMedia.push(tweet.media);
+      }
+    });
+
+    // Return only the media array
+    res.status(200).json(allMedia);
   } catch (err) {
-    return next(handleError(500, err.message));
+    return next(handleError(500, "User not found!"));
   }
 };
 
-// get user media
-const getUserMedia = async (req, res, next) => {
-    try {
-      const userTweets = await Tweet.find({ username: req.params.username });
-  
-      // Array to store all the media
-      const allMedia = [];
-  
-      // Iterate over each tweet to extract media
-      userTweets.forEach(tweet => {
-        if (tweet.media) {
-          allMedia.push(tweet.media);
-        }
-      });
-  
-      // Return only the media array
-      res.status(200).json(allMedia);
-    } catch (err) {
-      return next(handleError(500, "User not found!"));
-    }
-  };
-  
-
 export {
   getUser,
-  searchUsers,
   updateUser,
   deleteUser,
   followUser,
   unfollowUser,
   whoToFollow,
+  updatePassword,
   getLikedTweets,
-  getBookmarkedTweets,
   getUserMedia,
 };

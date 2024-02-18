@@ -1,22 +1,17 @@
-import express from "express";
-import {
-  createTweet,
-  getTweet,
-  deleteTweet,
-  likeOrDislike,
-  // getLikedTweets,
-  retweetUnretweet,
-  commentTweet,
-  // getCommentTweets,
-  getTrending,
-  getUserTweets,
-  getExploreTweets,
-  bookmarkTweet,
-  // getBookmarkedTweets,
-  getTimelineTweets,
-  // getUserMedia
-} from "../services/tweet.service.js";
-import verify from "../verifyToken.js";
+import express from 'express';
+import {createTweet,
+    getTweet,
+    deleteTweet,
+    commentTweet,
+    likeOrDislike,
+    getTimelineTweets,
+    getUserTweets,
+    getExploreTweets,
+    getTrending,
+    bookmarkTweet,
+    getBookmarkedTweets,
+    retweetUnretweet} from '../services/tweet.service.js';
+import verify from '../verifyToken.js';
 
 const router = express.Router();
 
@@ -39,7 +34,10 @@ router.put("/:id/like", verify, likeOrDislike);
 router.put("/:id/retweet", verify, retweetUnretweet);
 
 // bookmark a tweet
-router.put("/:id/bookmark", verify, bookmarkTweet);
+router.put('/:id/bookmark', verify, bookmarkTweet);
+
+// Get bookmarked tweets for the authenticated user
+router.get('/bookmarks', verify, getBookmarkedTweets);
 
 // get timeline tweet (user tweets and accounts followed tweets)
 router.get("/timeline", verify, getTimelineTweets);
@@ -48,7 +46,7 @@ router.get("/timeline", verify, getTimelineTweets);
 router.get("/:username/tweets", verify, getUserTweets);
 
 // get all tweets
-router.get("/explore/", verify, getExploreTweets);
+router.get('/explore', verify, getExploreTweets);
 
 // get trending hashtags
 router.get("/search/:word", verify, getTrending);

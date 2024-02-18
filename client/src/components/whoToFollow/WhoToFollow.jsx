@@ -7,17 +7,17 @@ const WhoToFollow = () => {
   const [users, setUsers] = useState(null);
   const { currentUser } = useSelector((state) => state.user);
 
-  // use effect hook can't be asynchronous, so we use an async function inside the hook
+  // useEffect hook can't be asynchronous, so we use an async function inside the hook
   useEffect(() => {
-    const fetchTweets = async () => {
+    const fetchUsers = async () => {
       try {
-        const user = await axios.get("/users/find/");
-        setUsers(user.data);
+        const response = await axios.get("/users/find/");
+        setUsers(response.data);
       } catch (err) {
         console.log(err);
       }
     };
-    fetchTweets();
+    fetchUsers();
   }, [currentUser.username]);
 
   return (
