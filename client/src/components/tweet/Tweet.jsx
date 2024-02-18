@@ -8,8 +8,6 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
-// import ChatIcon from '@mui/icons-material/Chat';
-import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
 import ChatBubbleOutlineRoundedIcon from "@mui/icons-material/ChatBubbleOutlineRounded";
 import RepeatIcon from "@mui/icons-material/Repeat";
 import RepeatOnIcon from "@mui/icons-material/RepeatOn";
@@ -125,16 +123,16 @@ const Tweet = ({ tweet, setData }) => {
   };
 
   return (
-    <div>
+    <div className="border-b-2 mb-5">
       {userData && (
         <>
-          <div className="flex space-x-2">
+          <div className="flex space-x-2 border-bottom">
             <Link to={`/profile/${userData.username}`}>
               <img
                 className="w-10 h-10 rounded-full object-cover"
                 src={
                   !userData.profilePicture
-                    ? "https://e7.pngegg.com/pngimages/442/477/png-clipart-computer-icons-user-profile-avatar-profile-heroes-profile-thumbnail.png"
+                    ? "https://twirpz.files.wordpress.com/2015/06/twitter-avi-gender-balanced-figure.png"
                     : userData.profilePicture
                 }
                 alt=""
@@ -153,85 +151,64 @@ const Tweet = ({ tweet, setData }) => {
             <p>-{dateStr}</p>
           </div>
 
-          <p>{tweet.content}</p>
+          <div>
+            <p>{tweet.content}</p>
 
-          {tweet.media &&
-            (tweet.media.includes(".mp4") ||
-            tweet.media.includes(".avi") ||
-            tweet.media.includes(".mov") ||
-            tweet.media.includes(".wmv") ||
-            tweet.media.includes(".flv") ||
-            tweet.media.includes(".mkv") ? (
-              <video
-                className="w-full h-80 object-cover rounded-lg"
-                controls
-                src={tweet.media}
-              />
-            ) : (
-              <img
-                className="w-full h-80 object-cover rounded-lg"
-                src={tweet.media}
-                alt="Media"
-              />
-            ))}
+            {tweet.media &&
+              (tweet.media.includes(".mp4") ||
+              tweet.media.includes(".avi") ||
+              tweet.media.includes(".mov") ||
+              tweet.media.includes(".wmv") ||
+              tweet.media.includes(".flv") ||
+              tweet.media.includes(".mkv") ? (
+                <video
+                  className="w-full h-80 object-cover rounded-lg"
+                  controls
+                  src={tweet.media}
+                />
+              ) : (
+                <img
+                  className="w-full h-80 object-cover rounded-lg"
+                  src={tweet.media}
+                  alt="Media"
+                />
+              ))}
+          </div>
 
-          {/* implement media display */}
-          {/* {tweet.media && tweet.media.includes("images/") ? (
-            <img
-              className="w-full h-80 object-cover rounded-lg"
-              src={tweet.media}
-            />
-          ) : (
-            <video
-              className="w-full h-80 object-cover rounded-lg"
-              controls
-              src={tweet.media}
-            />
-          )} */}
-
-          {/* {tweet.media !== "" && (
-            <img
-              className="w-full h-80 object-cover rounded-lg"
-              src={tweet.media}
-            />
-          )}
-          <video 
-            className="w-full h-80 object-cover rounded-lg"
-            controls
-            src={tweet.media} /> */}
-
-          <button onClick={handleLikeUnlike}>
-            {tweet.likes.includes(currentUser.username) ? (
-              <FavoriteIcon className="mr-2 my-2 cursor-pointer" />
-            ) : (
-              <FavoriteBorderIcon className="mr-2 my-2 cursor-pointer" />
-            )}
-            {tweet.likes.length}
-          </button>
-
-          <button onClick={handleRetweet}>
-            {tweet.retweets.includes(currentUser.username) ? (
-              <RepeatOnIcon className="mr-2 my-2 cursor-pointer" />
-            ) : (
-              <RepeatIcon className="mr-2 my-2 cursor-pointer" />
-            )}
-            {tweet.retweets.length}
-          </button>
-
-          <Link to={`/tweets/find/${tweet._id}`}>
-            <button onClick={handleComment}>
-              <ChatBubbleOutlineRoundedIcon />
-              {tweet.comments.length}
+          <div className="">
+            <button onClick={handleLikeUnlike} className="mr-10 my-2">
+              {tweet.likes.includes(currentUser.username) ? (
+                <FavoriteIcon className="cursor-pointer" />
+              ) : (
+                <FavoriteBorderIcon className="cursor-pointer" />
+              )}
+              {tweet.likes.length}
             </button>
-          </Link>
 
-          <button onClick={handleBookmark}>
-            {tweet.bookmarks.includes(currentUser.username) ? (
-              <BookmarkIcon />
-            ) : (
-              <BookmarkBorderIcon />
-            )}
-          </button>
+            <button onClick={handleRetweet} className="mr-10 my-2">
+              {tweet.retweets.includes(currentUser.username) ? (
+                <RepeatOnIcon className="cursor-pointer" />
+              ) : (
+                <RepeatIcon className="cursor-pointer" />
+              )}
+              {tweet.retweets.length}
+            </button>
+
+            <Link to={`/tweets/find/${tweet._id}`}>
+              <button onClick={handleComment} className="mr-10 my-2">
+                <ChatBubbleOutlineRoundedIcon />
+                {tweet.comments.length}
+              </button>
+            </Link>
+
+            <button onClick={handleBookmark} className="mr-10 my-2">
+              {tweet.bookmarks.includes(currentUser.username) ? (
+                <BookmarkIcon />
+              ) : (
+                <BookmarkBorderIcon />
+              )}
+            </button>
+          </div>
         </>
       )}
     </div>

@@ -12,17 +12,17 @@ const Bookmark = () => {
     {
         !currentUser ? <Login />: (
             <div className='grid grid-cols-1 md:grid-cols-4'> 
-                <div className='px-6'>
+                <div className='px-6 pt-[70px]'>
                     <LeftSideBar />
                 </div>
 
-                <div className='col-span-2 border-x-2 border-t-slate-800 px-6'>
+                <div className='feed col-span-2 border-x-2 border-t-slate-800 px-6 overflow-y-auto h-screen pt-[70px]'>
                     <BookmarkedTweets />
                 </div>
 
-                <div className='px-6'>
+                <div className='px-6 pt-[70px]'>
                     <WhoToFollow />
-          </div>
+                </div>
             </div>
         )
     }

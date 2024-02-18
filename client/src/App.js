@@ -1,22 +1,34 @@
-import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Outlet, useLocation } from "react-router-dom";
 import Home from "./pages/Home/Home";
 import Profile from "./pages/Profile/Profile";
 import Explore from "./pages/Explore/Explore";
 import Login from "./pages/Login/Login";
 import Signup from "./pages/Signup/Signup";
 import Messages from "./pages/Messages/Messages";
+// import Explore from "./pages/Explore/Explore";
+// import Login from "./pages/Login/Login";
+// import Signup from "./pages/Signup/Signup";
+// import Messages from "./pages/Messages/Messages";
 import Navbar from "./components/Navbar/Navbar";
+import Bookmark from "./pages/Bookmark/Bookmark";
 import Error from "./pages/Error/Error";
+import Setting from "./pages/Setting/Setting";
+import AccountSetting from "./pages/Setting/AccountSetting/AccountSetting";
 import "./App.css";
 import Tweet from "./pages/Tweet/Tweet";
 import MessageList from "./components/messages/MessageList";
 
 // create a theme for the website
 const Layout = () => {
+  const location = useLocation(); // Use the useLocation hook to get the current path
+
+  // Determine if the Navbar should be shown based on the current path
+  const showNavbar = !location.pathname.startsWith('/setting');
+
   return (
-    <div className="md:w-8/12 mx-auto">
-      <Navbar />
-      <Outlet></Outlet>
+    <div className="mx-auto">
+      {showNavbar && <Navbar />}
+      <Outlet />
     </div>
   );
 };
@@ -56,6 +68,17 @@ const router = createBrowserRouter([
       {
         path: "/:username/messages",
         element: <MessageList />,
+      },
+      {
+        path: "/setting",
+        element: <Outlet />, // Use Outlet here since Layout is already wrapping it
+        children: [
+          { index: true, element: <Setting /> },
+          { 
+            path: "account", 
+            element: <AccountSetting />,
+           },
+        ],
       },
       {
         path: "/logout",
