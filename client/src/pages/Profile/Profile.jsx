@@ -4,6 +4,9 @@ import RightSideBar from "../../components/rightSideBar/RightSideBar";
 import Tweet from "../../components/tweet/Tweet";
 import EditProfile from "../../components/editProfile/EditProfile";
 import axios from "axios";
+import { followUser } from "../../redux/userSlice";
+import { useDispatch } from "react-redux";
+
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
@@ -11,9 +14,7 @@ const Profile = () => {
   const [userProfile, setUserProfile] = useState(null);
   const [userTweets, setUserTweets] = useState(null);
   const [userLikes, setUserLikes] = useState(null);
-  const [userReplies, setUserReplies] = useState(null);
   const [userMedia, setUserMedia] = useState(null);
-  const [userBookmarks, setUserBookmarks] = useState(null);
 
   const [activeTab, setActiveTab] = useState("posts");
 
@@ -22,6 +23,28 @@ const Profile = () => {
 
   const { currentUser } = useSelector((state) => state.user);
   const { username } = useParams();
+  const dispatch = useDispatch();
+
+  // Function to handle the follow button click
+  const handleFollow = async () => {
+    if (!currentUser.following.includes(username)) {
+      try {
+        const follow = await axios.put(`/users/follow/${username}`);
+        dispatch(followUser(username));
+        // console.log(follow.data);
+      } catch (err) {
+        console.log(err);
+      }
+    } else {
+      try {
+        const unfollow = await axios.put(`/users/unfollow/${username}`);
+        // Dispatch the followUser action with the username as payload
+        dispatch(followUser(username));
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
 
   const fetchUserMedia = async () => {
     try {
@@ -81,7 +104,6 @@ const Profile = () => {
             ) : (
               <div className="w-full h-48 bg-gray-400"></div>
             )}  
-          </div>
 
 
             {/* Container for the content below the background */}
@@ -189,6 +211,7 @@ const Profile = () => {
                       // Determine if the media item is a video by looking for video file extensions in the URL
                       const isVideo = mediaItem.match(/\.(mp4|mov|avi|wmv|flv|mkv)(\?alt=media&token=[\w-]+)?$/i);
 
+
                       return (
                         <div key={index} className="w-1/3 p-1">
                           {isVideo ? (
@@ -209,7 +232,6 @@ const Profile = () => {
                   )}
                 </div>
               )}
-
 
                 {activeTab === 'likes' && (
                   <div className="likes">
