@@ -7,6 +7,7 @@ import {
   uploadBytesResumable,
   getDownloadURL,
 } from "firebase/storage";
+import { useParams } from "react-router-dom";
 import app from "../../firebase"; 
 import isVideoOrImage from "./fileCheck";
 import InsertPhotoRoundedIcon from '@mui/icons-material/InsertPhotoRounded';
@@ -17,10 +18,28 @@ const CreateTweet = () => {
   const [file, setFile] = useState(null);
   const [mediaUploadProgress, setMediaUploadProgress] = useState(0);
   const { currentUser } = useSelector((state) => state.user);
+  const [userProfile, setUserProfile] = useState(null);
+  const { username } = useParams();
+
 
   useEffect(() => {
     file && uploadMedia(file);
   }, [file]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Get user profile
+        const userProfile = await axios.get(`/users/find/${username}`);
+        setUserProfile(userProfile.data);
+
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    fetchData();
+  }, [currentUser, username]);
 
   // handle media upload
   const uploadMedia = (file) => {
@@ -82,16 +101,20 @@ const CreateTweet = () => {
   };
 
   return (
-    <div>
+    <div className="flex items-start space-x-4 pt-[20px]">
       {currentUser && (
-        <p className="font-bold pl-2 my-2">{currentUser.username}</p>
+        <img
+            src={currentUser && currentUser.profilePicture ? currentUser.profilePicture : "https://twirpz.files.wordpress.com/2015/06/twitter-avi-gender-balanced-figure.png"}
+            alt="Profile"
+            className="w-14 h-14 rounded-full object-cover"
+          />
       )}
-      <form action="" className="border-b-2 pb-6">
+      <form action="" className="flex-1 border-b-2 pb-6">
         <textarea
-          className="bg-slate-200 rounded-lg w-full p-2 "
+          className="bg-transparent rounded-lg w-full p-2 text-lg focus:outline-none resize-none"
           type="text"
           maxLength={280}
-          placeholder="What is happening?"
+          placeholder="What is happening?!"
           onChange={(e) => setContent(e.target.value)}
         ></textarea>
 
