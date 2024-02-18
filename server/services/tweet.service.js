@@ -249,8 +249,11 @@ try {
       tagCounts[tag] = 1;
     }
   });
+
+  // convert object to array
+  const trendsArray = Object.entries(tagCounts).map(([key, value]) => ({ key, value }));
   // return users tweets
-  res.status(200).json(tagCounts);
+  res.status(200).json(trendsArray);
 } catch (err) {
   console.log(err);
   return next(handleError(500, "There are no tweets with hashtags!"));
