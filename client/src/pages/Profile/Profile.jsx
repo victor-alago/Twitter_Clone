@@ -19,7 +19,6 @@ const Profile = () => {
   const [activeTab, setActiveTab] = useState("posts");
 
   const [openModal, setOpenModal] = useState(false);
-  
 
   const { currentUser } = useSelector((state) => state.user);
   const { username } = useParams();
@@ -108,11 +107,15 @@ const Profile = () => {
 
 
             {/* Container for the content below the background */}
-            <div className="relative mt-28 pb-4"> 
+            <div className="relative mt-28 pb-4">
               {/* Profile Image */}
               <div className="flex justify-center md:justify-start -mt-2">
                 <img
-                  src={userProfile && userProfile.profilePicture ? userProfile.profilePicture : "https://twirpz.files.wordpress.com/2015/06/twitter-avi-gender-balanced-figure.png"}
+                  src={
+                    userProfile && userProfile.profilePicture
+                      ? userProfile.profilePicture
+                      : "https://twirpz.files.wordpress.com/2015/06/twitter-avi-gender-balanced-figure.png"
+                  }
                   alt="Profile"
                   className="w-32 h-32 rounded-full object-cover border-4 border-white bg-white"
                 />
@@ -123,13 +126,28 @@ const Profile = () => {
                 {/* User Info */}
                 <div className="text-center md:text-left">
                   <h1 className="text-2xl font-bold">
-                    {userProfile && userProfile.firstname} {userProfile && userProfile.lastname}
+                    {userProfile && userProfile.firstname}{" "}
+                    {userProfile && userProfile.lastname}
                   </h1>
-                  <span className="text-gray-500">@{userProfile && userProfile.username}</span>
-                  <p className="text-gray-500">{userProfile && userProfile.bio}</p>
+                  <span className="text-gray-500">
+                    @{userProfile && userProfile.username}
+                  </span>
+                  <p className="text-gray-500">
+                    {userProfile && userProfile.bio}
+                  </p>
                   <div className="flex justify-center space-x-4 md:justify-start">
-                    <p><span className="font-bold">{userProfile && userProfile.following.length}</span> Following</p>
-                    <p><span className="font-bold">{userProfile && userProfile.followers.length}</span> Followers</p>
+                    <p>
+                      <span className="font-bold">
+                        {userProfile && userProfile.following.length}
+                      </span>{" "}
+                      Following
+                    </p>
+                    <p>
+                      <span className="font-bold">
+                        {userProfile && userProfile.followers.length}
+                      </span>{" "}
+                      Followers
+                    </p>
                   </div>
                 </div>
 
@@ -144,11 +162,12 @@ const Profile = () => {
                   </button>
                 ) : currentUser.following.includes(username) ? (
                   <button className="bg-blue-500 text-white rounded-full px-4 py-2"
-                  onClick={handleFollow}>
+                   onClick={handleFollow}>
                     Following
                   </button>
                 ) : (
-                  <button className="bg-blue-500 text-white rounded-full px-4 py-2" onClick={handleFollow}>
+                  <button className="bg-blue-500 text-white rounded-full px-4 py-2"
+                  onClick={handleFollow}>
                     Follow
                   </button>
                 )}
@@ -192,21 +211,22 @@ const Profile = () => {
               </button>
             </div>
 
-              {/* Content below the tabs */}
-              <div>
-                {activeTab === 'posts' && (
-                  <div className="posts">
-                    {/* Map through posts and render them */}
-                    {userTweets &&
-                      userTweets.map((tweet) => (
-                        <div key={tweet._id}>
-                          <Tweet tweet={tweet} setData={setUserTweets} />
-                        </div>
-                      ))}
-                  </div>
-                )}
-                {/* USER MEDIA */}
-                {activeTab === 'media' && (
+            {/* Content below the tabs */}
+            <div>
+              {activeTab === "posts" && (
+                <div className="posts">
+                  {/* Map through posts and render them */}
+                  {userTweets &&
+                    userTweets.map((tweet) => (
+                      <div key={tweet._id}>
+                        <Tweet tweet={tweet} setData={setUserTweets} />
+                      </div>
+                    ))}
+                </div>
+              )}
+
+              {/* USER MEDIA */}
+              {activeTab === "media" && (
                 <div className="flex flex-wrap justify-center md:justify-start">
                   {userMedia && userMedia.length > 0 ? (
                     userMedia.map((mediaItem, index) => {
@@ -217,13 +237,25 @@ const Profile = () => {
                         <div key={index} className="w-1/3 p-1">
                           {isVideo ? (
                             // Render a video element for video URLs
-                            <video controls className="w-full h-auto aspect-square object-cover">
-                              <source src={mediaItem} type={`video/${mediaItem.split('.').pop().split('?')[0]}`} />
+                            <video
+                              controls
+                              className="w-full h-auto aspect-square object-cover"
+                            >
+                              <source
+                                src={mediaItem}
+                                type={`video/${
+                                  mediaItem.split(".").pop().split("?")[0]
+                                }`}
+                              />
                               Your browser does not support the video tag.
                             </video>
                           ) : (
                             // Render an image element for image URLs
-                            <img src={mediaItem} alt={`Media ${index + 1}`} className="w-full h-auto aspect-square object-cover" />
+                            <img
+                              src={mediaItem}
+                              alt={`Media ${index + 1}`}
+                              className="w-full h-auto aspect-square object-cover"
+                            />
                           )}
                         </div>
                       );
@@ -233,6 +265,7 @@ const Profile = () => {
                   )}
                 </div>
               )}
+
 
 
                 {activeTab === 'likes' && (

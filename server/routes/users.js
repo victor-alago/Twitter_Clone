@@ -9,11 +9,13 @@ import {
   updatePassword,
   getLikedTweets,
   getUserMedia,
-  searchUsers
+  searchUsers,
+  getUserFollowers
 } from "../services/user.service.js";
 import verify from "../verifyToken.js";
 
 const router = express.Router();
+
 
 // get a user
 router.get("/find/:username", getUser);
@@ -35,6 +37,9 @@ router.put("/follow/:username", verify, followUser);
 
 // unfollow a user
 router.put("/unfollow/:username", verify, unfollowUser);
+
+// get followers for a user
+router.get('/:username/followers', verify, getUserFollowers);
 
 // get liked tweets for a user
 router.get("/:username/likes", verify, getLikedTweets);
