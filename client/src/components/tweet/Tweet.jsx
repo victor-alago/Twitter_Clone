@@ -123,7 +123,7 @@ const Tweet = ({ tweet, setData }) => {
   };
 
   return (
-    <div>
+    <div className="border-b-2 mb-5">
       {userData && (
         <>
           <div className="flex space-x-2 border-bottom">
@@ -175,33 +175,33 @@ const Tweet = ({ tweet, setData }) => {
               ))}
           </div>
 
-          <div className="flex justify-between">
-            <button onClick={handleLikeUnlike}>
+          <div className="">
+            <button onClick={handleLikeUnlike} className="mr-10 my-2">
               {tweet.likes.includes(currentUser.username) ? (
-                <FavoriteIcon className="mr-2 my-2 cursor-pointer" />
+                <FavoriteIcon className="cursor-pointer" />
               ) : (
-                <FavoriteBorderIcon className="mr-2 my-2 cursor-pointer" />
+                <FavoriteBorderIcon className="cursor-pointer" />
               )}
               {tweet.likes.length}
             </button>
 
-            <button onClick={handleRetweet}>
+            <button onClick={handleRetweet} className="mr-10 my-2">
               {tweet.retweets.includes(currentUser.username) ? (
-                <RepeatOnIcon className="mr-2 my-2 cursor-pointer" />
+                <RepeatOnIcon className="cursor-pointer" />
               ) : (
-                <RepeatIcon className="mr-2 my-2 cursor-pointer" />
+                <RepeatIcon className="cursor-pointer" />
               )}
               {tweet.retweets.length}
             </button>
 
             <Link to={`/tweets/find/${tweet._id}`}>
-              <button onClick={handleComment}>
+              <button onClick={handleComment} className="mr-10 my-2">
                 <ChatBubbleOutlineRoundedIcon />
                 {tweet.comments.length}
               </button>
             </Link>
 
-            <button onClick={handleBookmark}>
+            <button onClick={handleBookmark} className="mr-10 my-2">
               {tweet.bookmarks.includes(currentUser.username) ? (
                 <BookmarkIcon />
               ) : (

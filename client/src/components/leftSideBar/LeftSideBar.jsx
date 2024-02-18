@@ -5,7 +5,6 @@ import { logout } from "../../redux/userSlice";
 import CreateTweetModal from "../createTweetModal/CreateTweetModal";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 
 import HomeIcon from "@mui/icons-material/Home";
 import TagIcon from "@mui/icons-material/Tag";
@@ -17,8 +16,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 const LeftSideBar = () => {
   const [openModal, setOpenModal] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
-
-  const navigate = useNavigate();
+  const [userMedia, setUserMedia] = useState(null);
 
   const toggleOptions = () => {
     setShowOptions((prevShowOptions) => !prevShowOptions);
@@ -32,8 +30,19 @@ const LeftSideBar = () => {
   // logout function
   const handleLogout = () => {
     dispatch(logout());
-    navigate("/login");
+  };
 
+  const fetchUserMedia = async () => {
+    try {
+      // Make an API call to get the user media
+      const response = await axios.get(`/users/${username}/media`, {
+        withCredentials: true,
+      });
+      // Set the user media data to state
+      setUserMedia(response.data);
+    } catch (error) {
+      console.log("Error fetching user media:", error.response || error);
+    }
   };
 
   useEffect(() => {
@@ -42,12 +51,14 @@ const LeftSideBar = () => {
         // Get user profile
         const userProfile = await axios.get(`/users/find/${username}`);
         setUserProfile(userProfile.data);
+
       } catch (err) {
         console.log(err);
       }
     };
 
     fetchData();
+    fetchUserMedia();
   }, [currentUser, username]);
 
   return (
@@ -107,11 +118,11 @@ const LeftSideBar = () => {
             <img
               src={currentUser && currentUser.profilePicture ? currentUser.profilePicture : "https://twirpz.files.wordpress.com/2015/06/twitter-avi-gender-balanced-figure.png"}
               alt="Profile"
-              className="w-10 h-10 rounded-full object-cover"
+              className="w-14 h-14 rounded-full object-cover"
             />
             <div>
               <p className="font-bold">
-                {currentUser.firstname} {currentUser.lastname}
+              {currentUser && currentUser.firstname} {currentUser && currentUser.lastname}
               </p>
               <p className="font-normal">@{currentUser.username}</p>
             </div>
