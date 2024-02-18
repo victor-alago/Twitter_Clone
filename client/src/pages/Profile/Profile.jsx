@@ -4,6 +4,9 @@ import RightSideBar from "../../components/rightSideBar/RightSideBar";
 import Tweet from "../../components/tweet/Tweet";
 import EditProfile from "../../components/editProfile/EditProfile";
 import axios from "axios";
+import { followUser } from "../../redux/userSlice";
+import { useDispatch } from "react-redux";
+
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
@@ -11,9 +14,7 @@ const Profile = () => {
   const [userProfile, setUserProfile] = useState(null);
   const [userTweets, setUserTweets] = useState(null);
   const [userLikes, setUserLikes] = useState(null);
-  const [userReplies, setUserReplies] = useState(null);
   const [userMedia, setUserMedia] = useState(null);
-  const [userBookmarks, setUserBookmarks] = useState(null);
 
   const [activeTab, setActiveTab] = useState("posts");
 
@@ -21,6 +22,28 @@ const Profile = () => {
 
   const { currentUser } = useSelector((state) => state.user);
   const { username } = useParams();
+  const dispatch = useDispatch();
+
+  // Function to handle the follow button click
+  const handleFollow = async () => {
+    if (!currentUser.following.includes(username)) {
+      try {
+        const follow = await axios.put(`/users/follow/${username}`);
+        dispatch(followUser(username));
+        // console.log(follow.data);
+      } catch (err) {
+        console.log(err);
+      }
+    } else {
+      try {
+        const unfollow = await axios.put(`/users/unfollow/${username}`);
+        // Dispatch the followUser action with the username as payload
+        dispatch(followUser(username));
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
 
   const fetchUserMedia = async () => {
     try {
@@ -77,8 +100,13 @@ const Profile = () => {
 
             {/* User details */}
             <div>
-              <h1 className="text-2xl font-bold">{userProfile && userProfile.firstname} {userProfile && userProfile.lastname}</h1>
-              <span className="text-gray-500">@{userProfile && userProfile.username}</span>
+              <h1 className="text-2xl font-bold">
+                {userProfile && userProfile.firstname}{" "}
+                {userProfile && userProfile.lastname}
+              </h1>
+              <span className="text-gray-500">
+                @{userProfile && userProfile.username}
+              </span>
               <p className="text-gray-500">{userProfile && userProfile.bio}</p>
               <p>{userProfile && userProfile.following.length}</p>
               <p>{userProfile && userProfile.followers.length}</p>
@@ -94,12 +122,18 @@ const Profile = () => {
               </button>
             ) : // If the current user is following the profile user, show "Following" button
             currentUser.following.includes(username) ? (
-              <button className="bg-blue-500 text-white rounded-full p-2">
+              <button
+                className="bg-blue-500 text-white rounded-full p-2"
+                onClick={handleFollow}
+              >
                 Following
               </button>
             ) : (
               // Otherwise, show "Follow" button
-              <button className="bg-blue-500 text-white rounded-full p-2">
+              <button
+                className="bg-blue-500 text-white rounded-full p-2"
+                onClick={handleFollow}
+              >
                 Follow
               </button>
             )}
