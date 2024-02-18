@@ -32,7 +32,7 @@ const RightSideBar = () => {
 
   return (
     <>
-      <div>
+      <div className="mt-10">
         <form onSubmit={handleSubmit}>
           <div className="px-0 md:px-6 mx-auto">
             <SearchIcon className="absolute m-2" />
@@ -51,7 +51,7 @@ const RightSideBar = () => {
         <SearchModal setOpen={setOpenModal} users={searchResults} />
       )}
 
-      <div className="mt-10">
+      <div className="mt-8">
         <TrendingHashtags />
       </div>
 

@@ -20,6 +20,12 @@ const Navbar = () => {
     } else if (location.pathname.includes("/messages")) {
       // Check if the pathname includes'messages'
       return "Messages";
+    } else if (location.pathname.includes("/trending")) {
+      // Check if the pathname includes'messages'
+      return "Trending";
+    } else if (location.pathname.includes("/tweets")) {
+      // Check if the pathname includes'messages'
+      return "Tweet";
     } else if (location.pathname.includes("/setting")) {
       // Check if the pathname includes'messages'
       return "Setting";
@@ -28,7 +34,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-4 py-4 justify-center fixed top-0 w-full z-10 bg-white">
+    <div className="grid grid-cols-1 md:grid-cols-4 py-4 justify-center fixed top-0 w-full z-10 bg-white border-2">
       <div className="mx-auto md:mx-0">
         <img src="/X-Logo.png" alt="logo" width={"40px"} className="ml-8" />
       </div>
