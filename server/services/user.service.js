@@ -181,7 +181,43 @@ const whoToFollow = async (req, res, next) => {
     } catch(err) {
         next(err);
     }
-}
+};
 
-export {getUser, updateUser, deleteUser, followUser, unfollowUser, whoToFollow, updatePassword};
+// get liked tweets for a user
+const getLikedTweets = async (req, res, next) => {
+    try {
+        // get user's liked tweets
+        const likedTweets = await Tweet.find({
+        likes: { $in: [req.params.username] },
+        }).sort({ createdAt: -1 });
+        // return bookmarked tweets
+        res.status(200).json(likedTweets);
+    } catch (err) {
+        return next(handleError(500, err.message));
+    }
+};
+
+// get user media
+const getUserMedia = async (req, res, next) => {
+    try {
+        const userTweets = await Tweet.find({ username: req.params.username });
+
+        // Array to store all the media
+        const allMedia = [];
+
+        // Iterate over each tweet to extract media
+        userTweets.forEach(tweet => {
+        if (tweet.media) {
+            allMedia.push(tweet.media);
+        }
+        });
+
+        // Return only the media array
+        res.status(200).json(allMedia);
+    } catch (err) {
+        return next(handleError(500, "User not found!"));
+    }
+};
+
+export {getUser, updateUser, deleteUser, followUser, unfollowUser, whoToFollow, updatePassword, getLikedTweets, getUserMedia};
 

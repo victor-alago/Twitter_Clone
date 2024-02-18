@@ -46,7 +46,7 @@ router.get('/timeline', verify, getTimelineTweets);
 router.get('/:username/tweets', verify, getUserTweets);
 
 // get all tweets
-router.get('/explore/', verify, getExploreTweets);
+router.get('/explore', verify, getExploreTweets);
 
 // get trending hashtags
 router.get('/search/:word', verify, getTrending);

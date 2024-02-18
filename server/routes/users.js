@@ -4,7 +4,7 @@ import {getUser,
     deleteUser, 
     followUser, 
     unfollowUser,
-    whoToFollow, updatePassword} from '../services/user.service.js';
+    whoToFollow, updatePassword, getLikedTweets, getUserMedia} from '../services/user.service.js';
 import verify from '../verifyToken.js';
 
 const router  = express.Router();
@@ -22,6 +22,10 @@ router.delete('/:username', verify, deleteUser);
 router.put('/follow/:username', verify, followUser);
 // unfollow a user
 router.put('/unfollow/:username', verify, unfollowUser);
+// get liked tweets for a user
+router.get('/:username/likes', verify, getLikedTweets);
+// get user media
+router.get('/:username/media', verify, getUserMedia);
 
 
 export default router;

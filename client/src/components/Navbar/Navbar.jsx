@@ -23,7 +23,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className='grid grid-cols-1 md:grid-cols-4 my-5 justify-center'>
+    <div className='grid grid-cols-1 md:grid-cols-4 py-4 justify-center fixed top-0 w-full z-10 bg-white'>
        <div className='mx-auto md:mx-0'>
             <img 
                 src="/X-Logo.png" 

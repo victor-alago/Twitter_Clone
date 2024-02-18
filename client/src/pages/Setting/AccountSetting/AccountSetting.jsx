@@ -15,7 +15,7 @@ const AccountSetting = () => {
       ) : (
         // Use flex layout to fill the height of the screen
         <div className='flex flex-col md:flex-row min-h-screen'>
-          <div className='flex-none px-6'>
+          <div className='flex-none w-full md:w-1/4 px-6 pt-[70px]'>
             <LeftSideBar />
           </div>
 
