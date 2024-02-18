@@ -100,13 +100,13 @@ const LeftSideBar = () => {
             onClick={toggleOptions}
           >
             <img
-              src={currentUser && currentUser.profilePicture ? currentUser.profilePicture : "https://twirpz.files.wordpress.com/2015/06/twitter-avi-gender-balanced-figure.png"}
+              src={userProfile && userProfile.profilePicture ? userProfile.profilePicture : "https://twirpz.files.wordpress.com/2015/06/twitter-avi-gender-balanced-figure.png"}
               alt="Profile"
               className="w-10 h-10 rounded-full object-cover"
             />
             <div>
               <p className="font-bold">
-                {currentUser.firstname} {currentUser.lastname}
+                {userProfile.firstname} {userProfile.lastname}
               </p>
               <p className="font-normal">@{currentUser.username}</p>
             </div>
