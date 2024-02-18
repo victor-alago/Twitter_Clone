@@ -71,19 +71,25 @@ const Profile = () => {
         <div className="feed col-span-2 border-x-2 border-t-slate-800 px-6 overflow-y-auto h-screen pt-[70px]">
           <div className="relative p-4">
             {/* Background Image Placeholder */}
-            <div className="absolute top-0 left-0 w-full max-h-48 bg-gray-400">
+            <div className="absolute top-0 left-0 w-full max-h-48">
+            {userProfile && userProfile.bannerPicture ? (
               <img
-                src={currentUser && currentUser.bannerPicture}
-                className="max-h-48 w-full"
+                src={userProfile.bannerPicture}
+                alt="Banner"
+                className="max-h-48 w-full object-cover"
               />
-            </div>
+            ) : (
+              <div className="w-full h-48 bg-gray-400"></div>
+            )}  
+          </div>
+
 
             {/* Container for the content below the background */}
             <div className="relative mt-28 pb-4"> 
               {/* Profile Image */}
               <div className="flex justify-center md:justify-start -mt-2">
                 <img
-                  src={currentUser && currentUser.profilePicture ? currentUser.profilePicture : "https://twirpz.files.wordpress.com/2015/06/twitter-avi-gender-balanced-figure.png"}
+                  src={userProfile && userProfile.profilePicture ? userProfile.profilePicture : "https://twirpz.files.wordpress.com/2015/06/twitter-avi-gender-balanced-figure.png"}
                   alt="Profile"
                   className="w-32 h-32 rounded-full object-cover border-4 border-white bg-white"
                 />
@@ -177,18 +183,34 @@ const Profile = () => {
                 )}
                 {/* USER MEDIA */}
                 {activeTab === 'media' && (
-                  <div className="flex flex-wrap justify-center md:justify-start">
-                    {userMedia && userMedia.length > 0 ? (
-                      userMedia.map((mediaItem, index) => (
+                <div className="flex flex-wrap justify-center md:justify-start">
+                  {userMedia && userMedia.length > 0 ? (
+                    userMedia.map((mediaItem, index) => {
+                      // Determine if the media item is a video by looking for video file extensions in the URL
+                      const isVideo = mediaItem.match(/\.(mp4|mov|avi|wmv|flv|mkv)(\?alt=media&token=[\w-]+)?$/i);
+
+                      return (
                         <div key={index} className="w-1/3 p-1">
-                          <img src={mediaItem} alt={`Media ${index + 1}`} className="w-full h-auto aspect-square object-cover" />
+                          {isVideo ? (
+                            // Render a video element for video URLs
+                            <video controls className="w-full h-auto aspect-square object-cover">
+                              <source src={mediaItem} type={`video/${mediaItem.split('.').pop().split('?')[0]}`} />
+                              Your browser does not support the video tag.
+                            </video>
+                          ) : (
+                            // Render an image element for image URLs
+                            <img src={mediaItem} alt={`Media ${index + 1}`} className="w-full h-auto aspect-square object-cover" />
+                          )}
                         </div>
-                      ))
-                    ) : (
-                      <p>No media found.</p>
-                    )}
-                  </div>
-                )}
+                      );
+                    })
+                  ) : (
+                    <p>No media found.</p>
+                  )}
+                </div>
+              )}
+
+
                 {activeTab === 'likes' && (
                   <div className="likes">
                     {/* Map through likes and render them */}
