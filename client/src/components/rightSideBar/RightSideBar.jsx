@@ -27,7 +27,6 @@ const RightSideBar = () => {
   // when the user sublits the form, the handleSearch function will be called
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // await handleSearch();
   };
 
   return (
@@ -51,9 +50,7 @@ const RightSideBar = () => {
         <SearchModal setOpen={setOpenModal} users={searchResults} />
       )}
 
-      {/* <div>
-      <SearchedUsers users={users} />
-    </div> */}
+      
     </>
   );
 };
