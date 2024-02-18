@@ -20,7 +20,7 @@ const TimelineTweets = () => {
         fetchTweets();
     }, [currentUser.username]);
 
-    console.log(timelineTweets)
+    // console.log(timelineTweets)
 
     
 
