@@ -32,10 +32,11 @@ export const userSlice = createSlice({
     },
 
     updateProfile: (state, action) => {
-      const { profilePicture, firstname, lastname, bio } = action.payload;
+      const { profilePicture,bannerPicture, firstname, lastname, bio } = action.payload;
       state.currentUser = {
         ...state.currentUser,
         profilePicture: profilePicture,
+        bannerPicture: bannerPicture,
         firstname: firstname,
         lastname: lastname,
         bio: bio,
