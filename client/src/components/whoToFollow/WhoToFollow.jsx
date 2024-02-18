@@ -21,15 +21,19 @@ const WhoToFollow = () => {
   }, [currentUser.username]);
 
   return (
-    <div className="p-6 bg-slate-100 rounded-lg mx-4 space-y-4">
-      {users &&
-        users.map((user) => {
-          return (
-            <div key={user._id} className="p-2">
-              <User user={user} setData={setUsers} />
-            </div>
-          );
-        })}
+    <div className="absolute top-[calc(70px + 10px)] right-0 bg-blur flex items-start justify-end w-[calc(100vw - 20px)]">
+      <div className="relative w-[320px] bg-slate-200 rounded-lg p-8 flex flex-col gap-4">
+        <h2 className="font-bold text-2xl">You may like</h2>
+
+        {users &&
+          users.map((user) => {
+            return (
+              <div key={user._id} className="p-2">
+                <User user={user} setData={setUsers} />
+              </div>
+            );
+          })}
+      </div>
     </div>
   );
 };

@@ -233,6 +233,21 @@ const getUserMedia = async (req, res, next) => {
   }
 };
 
+
+const searchUsers = async (req, res, next) => {
+  try {
+    // get users from the database
+    const users = await User.find({
+      username: { $regex: req.params.searchTerm, $options: "i" },
+    });
+    // return users
+    res.status(200).json(users);
+  } catch (err) {
+    next(err);
+  }
+};
+
+
 export {
   getUser,
   updateUser,
@@ -243,4 +258,5 @@ export {
   updatePassword,
   getLikedTweets,
   getUserMedia,
+  searchUsers
 };

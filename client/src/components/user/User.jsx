@@ -34,16 +34,25 @@ const User = ({ user }) => {
   return (
     <div className="flex items-center justify-between">
       <div className="flex items-center space-x-2">
-        <img
+        {/* <img
           src={
             user
-              ? user.profilePicture || "default_profile_picture_url"
-              : "default_profile_picture_url"
+              ? user.profilePicture
+              : "https://twirpz.files.wordpress.com/2015/06/twitter-avi-gender-balanced-figure.png"
           }
           alt="Profile Picture"
           className="w-8 h-8 rounded-full object-cover"
+        /> */}
+        
+        <img
+          src={
+            user && user.profilePicture
+              ? user.profilePicture
+              : "https://twirpz.files.wordpress.com/2015/06/twitter-avi-gender-balanced-figure.png"
+          }
+          alt="Profile"
+          className="w-10 h-10 rounded-full object-cover"
         />
-
         <div>
           <Link to={`/profile/${user.username}`}>
             <h2 className="font-bold">
@@ -73,42 +82,5 @@ const User = ({ user }) => {
     </div>
   );
 };
-//     <div className="flex justify-between">
-//       <div>
-//         <img
-//           src={user && user.profilePicture}
-//           alt="Profile Picture"
-//           className="w-8 h-8 rounded-full object-cover"
-//         />
-
-//         <Link to={`/profile/${user.username}`}>
-//           <h2 className="font-bold">
-//             {user.firstname} {user.lastname}
-//           </h2>
-//         </Link>
-//         <span className="font-normal">@{user.username}</span>
-//       </div>
-
-//       {currentUser.following.includes(username) ? (
-//         <button
-//           onClick={handleFollow}
-//           className="bg-blue-500 text-white rounded-full p-2"
-//         >
-//           Following
-//         </button>
-//       ) : (
-//         // Otherwise, show "Follow" button
-//         <button
-//           onClick={handleFollow}
-//           className="bg-blue-500 text-white rounded-full p-1"
-//         >
-//           Follow
-//         </button>
-//       )}
-//     </div>
-//   );
-
-// Remove the unnecessary closing curly brace
-// };
 
 export default User;

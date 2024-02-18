@@ -1,34 +1,39 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import SearchModal from "../searchResultsModal/SearchResultsModal";
 // import SearchedUsers from "../searchUsers/SearchUsers";
 import axios from "axios";
 
 const RightSideBar = () => {
-  const [searchResults, setSearchResults] = useState([]);
+  const [searchResults, setSearchResults] = useState(null);
   const [openModal, setOpenModal] = useState(false);
   const [search, setSearch] = useState("");
 
-// handleSearch function will make a get request to the server to search for a user
-  const handleSearch = async () => {
-    try {
-      const res = await axios.get(`/users/find/${search}`);
-      setSearchResults(res.data);
-      setOpenModal(true);
-    } catch (err) {
-      console.log(err);
-    }
-  }
+  // handleSearch function will make a get request to the server to search for a user
+  useEffect(() => {
+    const handleSearch = async () => {
+      try {
+        // console.log(search);
+        const res = await axios.get(`/users/search/${search}`);
+        setSearchResults(res.data);
+        // setOpenModal(true);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    handleSearch();
+  }, [search]);
 
-// when the user sublits the form, the handleSearch function will be called
+  // when the user sublits the form, the handleSearch function will be called
   const handleSubmit = async (e) => {
     e.preventDefault();
-    handleSearch();
-  }
+    // await handleSearch();
+  };
+
   return (
     <>
-    <div>
-      <form onSubmit={handleSubmit}>
+      <div>
+        <form onSubmit={handleSubmit}>
           <div className="px-0 md:px-6 mx-auto">
             <SearchIcon className="absolute m-2" />
             <input
@@ -41,16 +46,19 @@ const RightSideBar = () => {
           </div>
         </form>
       </div>
-    {/* {openModal && <SearchModal setOpen={setOpenModal} users={searchResults}/>} */}
 
-    {/* <div>
+      {openModal && (
+        <SearchModal setOpen={setOpenModal} users={searchResults} />
+      )}
+
+      {/* <div>
       <SearchedUsers users={users} />
     </div> */}
     </>
-  )
-}
+  );
+};
 
-export default RightSideBar
+export default RightSideBar;
 
 // import React, { useState, useEffect } from "react";
 // import SearchUser from "../searchUsers/SearchUsers";
@@ -94,4 +102,3 @@ export default RightSideBar
 // };
 
 // export default RightSideBar;
-
