@@ -53,6 +53,6 @@ router.get('/explore', verify, getExploreTweets);
 router.get('/trending/', verify, getTrendingTags);
 
 // get trending hashtags
-router.get("/trending/:tag", verify, getTrending);
+router.get("/trending/:tag/tweets", verify, getTrending);
 
 export default router;

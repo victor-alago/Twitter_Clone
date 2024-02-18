@@ -4,6 +4,7 @@ import axios from "axios";
 
 const TrendingHashtags = () => {
   const [trends, setTrends] = useState([]);
+  
 
   useEffect(() => {
     const fetchTrends = async () => {
