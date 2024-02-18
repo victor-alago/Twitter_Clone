@@ -5,15 +5,15 @@ import Explore from "./pages/Explore/Explore";
 import Login from "./pages/Login/Login";
 import Signup from "./pages/Signup/Signup";
 import Messages from "./pages/Messages/Messages";
-import Navbar from "./components/Navbar/Navbar";
 import Error from "./pages/Error/Error";
-import "./App.css";
 import Tweet from "./pages/Tweet/Tweet";
+import Navbar from "./components/navbar/Navbar";
+import "./App.css";
 
 // create a theme for the website
 const Layout = () => {
   return (
-    <div className="md:w-8/12 mx-auto">
+    <div className="mx-auto">
       <Navbar />
       <Outlet></Outlet>
     </div>

@@ -153,85 +153,64 @@ const Tweet = ({ tweet, setData }) => {
             <p>-{dateStr}</p>
           </div>
 
-          <p>{tweet.content}</p>
+          <div>
+            <p>{tweet.content}</p>
 
-          {tweet.media &&
-            (tweet.media.includes(".mp4") ||
-            tweet.media.includes(".avi") ||
-            tweet.media.includes(".mov") ||
-            tweet.media.includes(".wmv") ||
-            tweet.media.includes(".flv") ||
-            tweet.media.includes(".mkv") ? (
-              <video
-                className="w-full h-80 object-cover rounded-lg"
-                controls
-                src={tweet.media}
-              />
-            ) : (
-              <img
-                className="w-full h-80 object-cover rounded-lg"
-                src={tweet.media}
-                alt="Media"
-              />
-            ))}
+            {tweet.media &&
+              (tweet.media.includes(".mp4") ||
+              tweet.media.includes(".avi") ||
+              tweet.media.includes(".mov") ||
+              tweet.media.includes(".wmv") ||
+              tweet.media.includes(".flv") ||
+              tweet.media.includes(".mkv") ? (
+                <video
+                  className="w-full h-80 object-cover rounded-lg"
+                  controls
+                  src={tweet.media}
+                />
+              ) : (
+                <img
+                  className="w-full h-80 object-cover rounded-lg"
+                  src={tweet.media}
+                  alt="Media"
+                />
+              ))}
+          </div>
 
-          {/* implement media display */}
-          {/* {tweet.media && tweet.media.includes("images/") ? (
-            <img
-              className="w-full h-80 object-cover rounded-lg"
-              src={tweet.media}
-            />
-          ) : (
-            <video
-              className="w-full h-80 object-cover rounded-lg"
-              controls
-              src={tweet.media}
-            />
-          )} */}
-
-          {/* {tweet.media !== "" && (
-            <img
-              className="w-full h-80 object-cover rounded-lg"
-              src={tweet.media}
-            />
-          )}
-          <video 
-            className="w-full h-80 object-cover rounded-lg"
-            controls
-            src={tweet.media} /> */}
-
-          <button onClick={handleLikeUnlike}>
-            {tweet.likes.includes(currentUser.username) ? (
-              <FavoriteIcon className="mr-2 my-2 cursor-pointer" />
-            ) : (
-              <FavoriteBorderIcon className="mr-2 my-2 cursor-pointer" />
-            )}
-            {tweet.likes.length}
-          </button>
-
-          <button onClick={handleRetweet}>
-            {tweet.retweets.includes(currentUser.username) ? (
-              <RepeatOnIcon className="mr-2 my-2 cursor-pointer" />
-            ) : (
-              <RepeatIcon className="mr-2 my-2 cursor-pointer" />
-            )}
-            {tweet.retweets.length}
-          </button>
-
-          <Link to={`/tweets/find/${tweet._id}`}>
-            <button onClick={handleComment}>
-              <ChatBubbleOutlineRoundedIcon />
-              {tweet.comments.length}
+          <div className="flex justify-between">
+            <button onClick={handleLikeUnlike}>
+              {tweet.likes.includes(currentUser.username) ? (
+                <FavoriteIcon className="mr-2 my-2 cursor-pointer" />
+              ) : (
+                <FavoriteBorderIcon className="mr-2 my-2 cursor-pointer" />
+              )}
+              {tweet.likes.length}
             </button>
-          </Link>
 
-          <button onClick={handleBookmark}>
-            {tweet.bookmarks.includes(currentUser.username) ? (
-              <BookmarkIcon />
-            ) : (
-              <BookmarkBorderIcon />
-            )}
-          </button>
+            <button onClick={handleRetweet}>
+              {tweet.retweets.includes(currentUser.username) ? (
+                <RepeatOnIcon className="mr-2 my-2 cursor-pointer" />
+              ) : (
+                <RepeatIcon className="mr-2 my-2 cursor-pointer" />
+              )}
+              {tweet.retweets.length}
+            </button>
+
+            <Link to={`/tweets/find/${tweet._id}`}>
+              <button onClick={handleComment}>
+                <ChatBubbleOutlineRoundedIcon />
+                {tweet.comments.length}
+              </button>
+            </Link>
+
+            <button onClick={handleBookmark}>
+              {tweet.bookmarks.includes(currentUser.username) ? (
+                <BookmarkIcon />
+              ) : (
+                <BookmarkBorderIcon />
+              )}
+            </button>
+          </div>
         </>
       )}
     </div>

@@ -29,15 +29,15 @@ const EditProfile = ({ setOpen }) => {
   const navigate = useNavigate();
 
   // handle user update
-  const updateUser = () => {
+  const updateUser = async () => {
     try {
-      axios.put(`/users/${currentUser.username}`, {
+      const updateUserProfile = await axios.put(`/users/${currentUser.username}`, {
         profilePicture: img,
         firstname: firstname,
         lastname: lastname,
         bio: bio,
       });
-    //   dispatch(updateProfile(updateUser));
+      dispatch(updateProfile(updateUserProfile));
     } catch (error) {
       console.log(error);
     }
@@ -114,26 +114,28 @@ const EditProfile = ({ setOpen }) => {
           type="file"
           className="bg-transparent border border-slate-500 rounded p-2"
           accept="image/*"
-          onChange={(e) => setImg(e.target.files[0])}
+          onChange={(e) => setFile(e.target.files[0])}
         />
 
         <input
           type="text"
           className="bg-transparent border border-slate-500 rounded p-2"
-          placeholder="Firstname"
+          placeholder={currentUser.firstname}
+          required
           onChange={(e) => setFirstname(e.target.value)}
         />
         <input
           type="text"
           className="bg-transparent border border-slate-500 rounded p-2"
-          placeholder="Lastname"
+          placeholder={currentUser.lastname}
+          required
           onChange={(e) => setLastname(e.target.value)}
         />
 
         <input
           type="text"
           className="bg-transparent border border-slate-500 rounded p-2"
-          placeholder="Bio"
+          placeholder={currentUser.bio}
           onChange={(e) => setBio(e.target.value)}
         />
 

@@ -4,41 +4,38 @@ import handleError from "../error.js";
 
 // create a tweet
 const createTweet = async (req, res, next) => {
-    const username = req.user.username;
-    // const content = req.body.content;
-    const newTweet = new Tweet({username, ...req.body});
-    try {
-        const savedTweet = await newTweet.save();
-        return res.status(200).json(savedTweet);
-    } catch(err){
-        return next(handleError(500, err.message))
-    }
-
+  const username = req.user.username;
+  // const content = req.body.content;
+  const newTweet = new Tweet({ username, ...req.body });
+  try {
+    const savedTweet = await newTweet.save();
+    return res.status(200).json(savedTweet);
+  } catch (err) {
+    return next(handleError(500, err.message));
+  }
 };
 
 // get a tweet
 const getTweet = async (req, res, next) => {
-    try{
-        // get tweet
-        const tweet = await Tweet.find({_id: req.params.id});
-        // get all comments on that tweet
-        if (!tweet[0].comments){
-            return res.status(200).json(tweet);
-        }
-        else{
-            const tweetComments = await Promise.all(
-                tweet[0].comments.map((commentId) => {
-                    return Tweet.find({_id: commentId});
-                })
-            );
-            // return tweet and comments
-            res.status(200).json(tweet.concat(...tweetComments));
-        }
-
-    } catch(err){
-        console.log(err);
-        return next(handleError(500, err.message));
+  try {
+    // get tweet
+    const tweet = await Tweet.find({ _id: req.params.id });
+    // get all comments on that tweet
+    if (!tweet[0].comments) {
+      return res.status(200).json(tweet);
+    } else {
+      const tweetComments = await Promise.all(
+        tweet[0].comments.map((commentId) => {
+          return Tweet.find({ _id: commentId });
+        })
+      );
+      // return tweet and comments
+      res.status(200).json(tweet.concat(...tweetComments));
     }
+  } catch (err) {
+    console.log(err);
+    return next(handleError(500, err.message));
+  }
 };
 
 //delete tweet
@@ -74,6 +71,20 @@ const likeOrDislike = async (req, res, next) => {
   }
 };
 
+// // get liked tweets for a user
+// const getLikedTweets = async (req, res, next) => {
+//   try {
+//     // get user's liked tweets
+//     const likedTweets = await Tweet.find({
+//       likes: { $in: [req.params.username] },
+//     }).sort({ createdAt: -1 });
+//     // return bookmarked tweets
+//     res.status(200).json(likedTweets);
+//   } catch (err) {
+//     return next(handleError(500, err.message));
+//   }
+// };
+
 // retweet a tweet
 const retweetUnretweet = async (req, res, next) => {
   try {
@@ -106,6 +117,20 @@ const commentTweet = async (req, res, next) => {
     return next(handleError(500, err.message));
   }
 };
+
+// // get comment tweets for a user
+// const getCommentTweets = async (req, res, next) => {
+//   try {
+//     // get user's tweet replies
+//     const repliedTweets = await Tweet.find({
+//       comments: { $in: [req.params.username] },
+//     }).sort({ createdAt: -1 });
+//     // return bookmarked tweets
+//     res.status(200).json(repliedTweets);
+//   } catch (err) {
+//     return next(handleError(500, err.message));
+//   }
+// };
 
 // get timeline tweets for a user
 const getTimelineTweets = async (req, res, next) => {
@@ -184,6 +209,22 @@ const bookmarkTweet = async (req, res, next) => {
   }
 };
 
+// get bookmarked tweets for a user
+// const getBookmarkedTweets = async (req, res, next) => {
+//   try {
+//     // get user's bookmarked tweets
+//     const bookmarkedTweets = await Tweet.find({
+//       bookmarks: { $in: [req.user.username] },
+//     }).sort({ createdAt: -1 });
+//     // return bookmarked tweets
+//     res.status(200).json(bookmarkedTweets);
+//   } catch (err) {
+//     return next(handleError(500, err.message));
+//   }
+// };
+
+
+// get trending tweets
 const getTrending = async (req, res, next) => {
   try {
     // Decode the hashtag from the URL parameter
@@ -203,16 +244,29 @@ const getTrending = async (req, res, next) => {
   }
 };
 
+// const getUserMedia = async (req, res, next) => {
+//   try {
+//     const userMedia = await Tweet.find({ username: req.params.username });
+//     res.status(200).json(userMedia);
+//   } catch (err) {
+//     return next(handleError(500, "User not found!"));
+//   }
+// };
+
 export {
   createTweet,
   getTweet,
   deleteTweet,
   likeOrDislike,
+  // getLikedTweets,
   retweetUnretweet,
   commentTweet,
+  // getCommentTweets,
   getTrending,
   getUserTweets,
   getExploreTweets,
   bookmarkTweet,
-  getTimelineTweets
+  // getBookmarkedTweets,
+  getTimelineTweets,
+  // getUserMedia,
 };
