@@ -247,6 +247,30 @@ const searchUsers = async (req, res, next) => {
   }
 };
 
+const getUserFollowers = async (req, res, next) => {
+  try {
+      // Get user followers
+      const user = await User.findOne({ username: req.params.username });
+
+      if (!user) {
+          return res.status(404).json({ error: "User not found!" });
+      }
+
+      // Extract follower usernames
+      const sanitizedFollowers = user.followers.map(follower => ({
+          username: follower,
+      }));
+
+      console.log("Sanitized Followers:", sanitizedFollowers);
+
+      res.status(200).json(sanitizedFollowers);
+  } catch (err) {
+      console.error("Error:", err);
+      next(err);
+  }
+};
+
+
 
 export {
   getUser,
@@ -258,5 +282,6 @@ export {
   updatePassword,
   getLikedTweets,
   getUserMedia,
-  searchUsers
+  searchUsers,
+  getUserFollowers
 };
