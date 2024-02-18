@@ -1,7 +1,6 @@
 import express from "express";
 import {
   getUser,
-//   searchUsers,
   updateUser,
   deleteUser,
   followUser,
@@ -10,6 +9,7 @@ import {
   updatePassword,
   getLikedTweets,
   getUserMedia,
+  searchUsers
 } from "../services/user.service.js";
 import verify from "../verifyToken.js";
 
@@ -47,5 +47,8 @@ router.get("/:username/likes", verify, getLikedTweets);
 
 // get user media
 router.get("/:username/media", verify, getUserMedia);
+
+// search for users
+router.get("/search/:searchTerm", verify, searchUsers);
 
 export default router;
