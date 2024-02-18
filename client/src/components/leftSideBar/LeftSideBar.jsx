@@ -16,6 +16,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 const LeftSideBar = () => {
   const [openModal, setOpenModal] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
+  const [userMedia, setUserMedia] = useState(null);
 
   const toggleOptions = () => {
     setShowOptions((prevShowOptions) => !prevShowOptions);
@@ -31,18 +32,33 @@ const LeftSideBar = () => {
     dispatch(logout());
   };
 
+  const fetchUserMedia = async () => {
+    try {
+      // Make an API call to get the user media
+      const response = await axios.get(`/users/${username}/media`, {
+        withCredentials: true,
+      });
+      // Set the user media data to state
+      setUserMedia(response.data);
+    } catch (error) {
+      console.log("Error fetching user media:", error.response || error);
+    }
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         // Get user profile
         const userProfile = await axios.get(`/users/find/${username}`);
         setUserProfile(userProfile.data);
+
       } catch (err) {
         console.log(err);
       }
     };
 
     fetchData();
+    fetchUserMedia();
   }, [currentUser, username]);
 
   return (
@@ -100,13 +116,13 @@ const LeftSideBar = () => {
             onClick={toggleOptions}
           >
             <img
-              src={userProfile && userProfile.profilePicture ? userProfile.profilePicture : "https://twirpz.files.wordpress.com/2015/06/twitter-avi-gender-balanced-figure.png"}
+              src={currentUser && currentUser.profilePicture ? currentUser.profilePicture : "https://twirpz.files.wordpress.com/2015/06/twitter-avi-gender-balanced-figure.png"}
               alt="Profile"
-              className="w-10 h-10 rounded-full object-cover"
+              className="w-14 h-14 rounded-full object-cover"
             />
             <div>
               <p className="font-bold">
-                {userProfile.firstname} {userProfile.lastname}
+              {currentUser && currentUser.firstname} {currentUser && currentUser.lastname}
               </p>
               <p className="font-normal">@{currentUser.username}</p>
             </div>
