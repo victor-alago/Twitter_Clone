@@ -18,6 +18,7 @@ const Profile = () => {
   const [activeTab, setActiveTab] = useState("posts");
 
   const [openModal, setOpenModal] = useState(false);
+  
 
   const { currentUser } = useSelector((state) => state.user);
   const { username } = useParams();
@@ -68,46 +69,67 @@ const Profile = () => {
         </div>
 
         <div className="feed col-span-2 border-x-2 border-t-slate-800 px-6 overflow-y-auto h-screen pt-[70px]">
-          <div className="flex justify-between items-center">
-            <img
-              src={userProfile && userProfile.profilePicture}
-              alt="Profile Picture"
-              className="w-20 h-20 rounded-full object-cover"
-            />
-
-            {/* User details */}
-            <div>
-              <h1 className="text-2xl font-bold">{userProfile && userProfile.firstname} {userProfile && userProfile.lastname}</h1>
-              <span className="text-gray-500">@{userProfile && userProfile.username}</span>
-              <p className="text-gray-500">{userProfile && userProfile.bio}</p>
-              <p>{userProfile && userProfile.following.length}</p>
-              <p>{userProfile && userProfile.followers.length}</p>
+          <div className="relative p-4">
+            {/* Background Image Placeholder */}
+            <div className="absolute top-0 left-0 w-full max-h-48 bg-gray-400">
+              <img
+                src={currentUser && currentUser.bannerPicture}
+                className="max-h-48 w-full"
+              />
             </div>
 
-            {/* If profile page is for the current user, show edit profile button */}
-            {currentUser.username === username ? (
-              <button
-                className="bg-blue-500 text-white rounded-full px-4 py-2"
-                onClick={() => setOpenModal(true)}
-              >
-                Edit Profile
-              </button>
-            ) : // If the current user is following the profile user, show "Following" button
-            currentUser.following.includes(username) ? (
-              <button className="bg-blue-500 text-white rounded-full p-2">
-                Following
-              </button>
-            ) : (
-              // Otherwise, show "Follow" button
-              <button className="bg-blue-500 text-white rounded-full p-2">
-                Follow
-              </button>
-            )}
-          </div>
+            {/* Container for the content below the background */}
+            <div className="relative mt-28 pb-4"> 
+              {/* Profile Image */}
+              <div className="flex justify-center md:justify-start -mt-2">
+                <img
+                  src={currentUser && currentUser.profilePicture ? currentUser.profilePicture : "https://twirpz.files.wordpress.com/2015/06/twitter-avi-gender-balanced-figure.png"}
+                  alt="Profile"
+                  className="w-32 h-32 rounded-full object-cover border-4 border-white bg-white"
+                />
+              </div>
 
-          <div className="profile-tabs border-b border-gray-300">
+              {/* Container for Information and Button */}
+              <div className="mt-2 md:flex md:justify-between md:items-end">
+                {/* User Info */}
+                <div className="text-center md:text-left">
+                  <h1 className="text-2xl font-bold">
+                    {userProfile && userProfile.firstname} {userProfile && userProfile.lastname}
+                  </h1>
+                  <span className="text-gray-500">@{userProfile && userProfile.username}</span>
+                  <p className="text-gray-500">{userProfile && userProfile.bio}</p>
+                  <div className="flex justify-center space-x-4 md:justify-start">
+                    <p><span className="font-bold">{userProfile && userProfile.following.length}</span> Following</p>
+                    <p><span className="font-bold">{userProfile && userProfile.followers.length}</span> Followers</p>
+                  </div>
+                </div>
+
+              {/* Action Button */}
+              <div className="mt-4 md:mt-0">
+                {currentUser.username === username ? (
+                  <button
+                    className="bg-blue-500 text-white rounded-full px-4 py-2"
+                    onClick={() => setOpenModal(true)}
+                  >
+                    Edit Profile
+                  </button>
+                ) : currentUser.following.includes(username) ? (
+                  <button className="bg-blue-500 text-white rounded-full px-4 py-2">
+                    Following
+                  </button>
+                ) : (
+                  <button className="bg-blue-500 text-white rounded-full px-4 py-2">
+                    Follow
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+          <div className="profile-tabs border-b-2 border-gray-300">
             {/* Tabs for "Posts", "Media", "Likes" */}
-            <div className="flex justify-around text-sm font-medium text-gray-500">
+            <div className="flex justify-around text-sm font-medium text-gray-500 mb-10 border-b-2">
               <button
                 className={`px-4 py-2 ${
                   activeTab === "posts"
