@@ -124,15 +124,20 @@ const Profile = () => {
               <div>
                 {activeTab === 'posts' && (
                   <div className="posts">
-                    {/* Map through posts and render them */}
-                    {userTweets &&
+                    {/* Check if userTweets is not null and has length */}
+                    {userTweets && userTweets.length > 0 ? (
                       userTweets.map((tweet) => (
                         <div key={tweet._id}>
                           <Tweet tweet={tweet} setData={setUserTweets} />
                         </div>
-                      ))}
+                      ))
+                    ) : (
+                      // Display message if there are no tweets
+                      <p className="text-center text-gray-600 mt-10">No posts found.</p>
+                    )}
                   </div>
                 )}
+
                 {/* USER MEDIA */}
                 {activeTab === 'media' && (
                   <div className="flex flex-wrap justify-center md:justify-start">
@@ -143,25 +148,30 @@ const Profile = () => {
                         </div>
                       ))
                     ) : (
-                      <p>No media found.</p>
+                      <p className="text-center text-gray-600 mt-10">No media found.</p>
                     )}
                   </div>
                 )}
+
+                {/* USER LIKES */}
                 {activeTab === 'likes' && (
                   <div className="likes">
-                    {/* Map through likes and render them */}
-                    {userLikes &&
+                    {/* Check if userLikes is not null and has length */}
+                    {userLikes && userLikes.length > 0 ? (
                       userLikes.map((tweet) => (
                         <div key={tweet._id}>
                           <Tweet tweet={tweet} setData={setUserLikes} />
                         </div>
-                      ))}
+                      ))
+                    ) : (
+                      // Display message if there are no liked tweets
+                      <p className="text-center text-gray-600 mt-10">No likes found.</p>
+                    )}
                   </div>
                 )}
               </div>
             </div>
           </div>
-  
           <div className="px-6 pt-[70px]">
             <RightSideBar />
           </div>
