@@ -109,37 +109,39 @@ const CreateTweet = () => {
             className="w-14 h-14 rounded-full object-cover"
           />
       )}
-      <form action="" className="flex-1 border-b-2 pb-6">
-        <textarea
-          className="bg-transparent rounded-lg w-full p-2 text-lg focus:outline-none resize-none"
-          type="text"
-          maxLength={280}
-          placeholder="What is happening?!"
-          onChange={(e) => setContent(e.target.value)}
-        ></textarea>
+      <form action="" className="flex-1 border-b-2 pb-6 flex flex-col">
+      <textarea
+        className="bg-transparent rounded-lg w-full p-2 text-lg focus:outline-none resize-none"
+        type="text"
+        maxLength={280}
+        placeholder="What is happening?!"
+        onChange={(e) => setContent(e.target.value)}
+      ></textarea>
 
-        <span>
-          {mediaUploadProgress > 0 && "Uploading: " + mediaUploadProgress + "%"}
-        </span>
-        <label htmlFor="mediaInput">
+      {mediaUploadProgress > 0 && (
+        <span>Uploading: {mediaUploadProgress}%</span>
+      )}
+
+      <div className="flex justify-between items-center mt-2">
+        <label htmlFor="mediaInput" className="cursor-pointer text-blue-600 flex items-center">
+          <InsertPhotoRoundedIcon />
           <input
             id="mediaInput"
             type="file"
             className="hidden"
             onChange={(e) => setFile(e.target.files[0])}
           />
-          <InsertPhotoRoundedIcon className="cursor-pointer text-blue-600"/>
         </label>
 
-        <div>
-          <button
-            className="bg-blue-500 text-white py-2 px-4 rounded-full ml-auto"
-            onClick={handleSubmit}
-          >
-            Tweet
-          </button>
-        </div>
-      </form>
+        <button
+          className="bg-blue-500 text-white py-2 px-4 rounded-full"
+          onClick={handleSubmit}
+        >
+          Tweet
+        </button>
+      </div>
+    </form>
+
     </div>
   );
 };
