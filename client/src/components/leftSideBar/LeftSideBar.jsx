@@ -32,19 +32,6 @@ const LeftSideBar = () => {
     dispatch(logout());
   };
 
-  const fetchUserMedia = async () => {
-    try {
-      // Make an API call to get the user media
-      const response = await axios.get(`/users/${username}/media`, {
-        withCredentials: true,
-      });
-      // Set the user media data to state
-      setUserMedia(response.data);
-    } catch (error) {
-      console.log("Error fetching user media:", error.response || error);
-    }
-  };
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -58,7 +45,6 @@ const LeftSideBar = () => {
     };
 
     fetchData();
-    fetchUserMedia();
   }, [currentUser, username]);
 
   return (
