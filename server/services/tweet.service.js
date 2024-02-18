@@ -71,19 +71,6 @@ const likeOrDislike = async (req, res, next) => {
   }
 };
 
-// // get liked tweets for a user
-// const getLikedTweets = async (req, res, next) => {
-//   try {
-//     // get user's liked tweets
-//     const likedTweets = await Tweet.find({
-//       likes: { $in: [req.params.username] },
-//     }).sort({ createdAt: -1 });
-//     // return bookmarked tweets
-//     res.status(200).json(likedTweets);
-//   } catch (err) {
-//     return next(handleError(500, err.message));
-//   }
-// };
 
 // retweet a tweet
 const retweetUnretweet = async (req, res, next) => {
@@ -118,19 +105,6 @@ const commentTweet = async (req, res, next) => {
   }
 };
 
-// // get comment tweets for a user
-// const getCommentTweets = async (req, res, next) => {
-//   try {
-//     // get user's tweet replies
-//     const repliedTweets = await Tweet.find({
-//       comments: { $in: [req.params.username] },
-//     }).sort({ createdAt: -1 });
-//     // return bookmarked tweets
-//     res.status(200).json(repliedTweets);
-//   } catch (err) {
-//     return next(handleError(500, err.message));
-//   }
-// };
 
 // get timeline tweets for a user
 const getTimelineTweets = async (req, res, next) => {
@@ -246,24 +220,14 @@ const getTrending = async (req, res, next) => {
   }
 };
 
-// const getUserMedia = async (req, res, next) => {
-//   try {
-//     const userMedia = await Tweet.find({ username: req.params.username });
-//     res.status(200).json(userMedia);
-//   } catch (err) {
-//     return next(handleError(500, "User not found!"));
-//   }
-// };
 
 export {
   createTweet,
   getTweet,
   deleteTweet,
   likeOrDislike,
-  // getLikedTweets,
   retweetUnretweet,
   commentTweet,
-  // getCommentTweets,
   getTrending,
   getUserTweets,
   getExploreTweets,
