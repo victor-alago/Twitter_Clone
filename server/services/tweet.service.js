@@ -4,41 +4,38 @@ import handleError from "../error.js";
 
 // create a tweet
 const createTweet = async (req, res, next) => {
-    const username = req.user.username;
-    // const content = req.body.content;
-    const newTweet = new Tweet({username, ...req.body});
-    try {
-        const savedTweet = await newTweet.save();
-        return res.status(200).json(savedTweet);
-    } catch(err){
-        return next(handleError(500, err.message))
-    }
-
+  const username = req.user.username;
+  // const content = req.body.content;
+  const newTweet = new Tweet({ username, ...req.body });
+  try {
+    const savedTweet = await newTweet.save();
+    return res.status(200).json(savedTweet);
+  } catch (err) {
+    return next(handleError(500, err.message));
+  }
 };
 
 // get a tweet
 const getTweet = async (req, res, next) => {
-    try{
-        // get tweet
-        const tweet = await Tweet.find({_id: req.params.id});
-        // get all comments on that tweet
-        if (!tweet[0].comments){
-            return res.status(200).json(tweet);
-        }
-        else{
-            const tweetComments = await Promise.all(
-                tweet[0].comments.map((commentId) => {
-                    return Tweet.find({_id: commentId});
-                })
-            );
-            // return tweet and comments
-            res.status(200).json(tweet.concat(...tweetComments));
-        }
-
-    } catch(err){
-        console.log(err);
-        return next(handleError(500, err.message));
+  try {
+    // get tweet
+    const tweet = await Tweet.find({ _id: req.params.id });
+    // get all comments on that tweet
+    if (!tweet[0].comments) {
+      return res.status(200).json(tweet);
+    } else {
+      const tweetComments = await Promise.all(
+        tweet[0].comments.map((commentId) => {
+          return Tweet.find({ _id: commentId });
+        })
+      );
+      // return tweet and comments
+      res.status(200).json(tweet.concat(...tweetComments));
     }
+  } catch (err) {
+    console.log(err);
+    return next(handleError(500, err.message));
+  }
 };
 
 //delete tweet
@@ -74,6 +71,7 @@ const likeOrDislike = async (req, res, next) => {
   }
 };
 
+
 // retweet a tweet
 const retweetUnretweet = async (req, res, next) => {
   try {
@@ -106,6 +104,7 @@ const commentTweet = async (req, res, next) => {
     return next(handleError(500, err.message));
   }
 };
+
 
 // get timeline tweets for a user
 const getTimelineTweets = async (req, res, next) => {
@@ -220,6 +219,7 @@ const getTrending = async (req, res, next) => {
     return next(handleError(500, "There are no tweets!"));
   }
 };
+
 
 export {
   createTweet,
