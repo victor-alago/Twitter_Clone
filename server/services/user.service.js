@@ -1,5 +1,5 @@
 import User from "../models/User.js";
-import Tweet from "../models/Tweet.js";
+import Tweet from "../models/tweet.js";
 import handleError from "../error.js";
 
 // get user
@@ -147,5 +147,79 @@ const whoToFollow = async (req, res, next) => {
     }
 }
 
-export {getUser, updateUser, deleteUser, followUser, unfollowUser, whoToFollow};
+// Modify the getUserFollowers function to include details
+const getUserFollowers = async (req, res, next) => {
+    try {
+      const user = await User.findOne({ username: req.params.username });
+  
+      if (!user) {
+        return res.status(404).json({ error: "User not found!" });
+      }
+  
+      // Include follower details
+      const sanitizedFollowers = user.followers.map(async (followerUsername) => {
+        const follower = await User.findOne({ username: followerUsername });
+        return {
+          username: follower.username,
+          profilePicture: follower.profilePicture,
+          // Include other details as needed
+        };
+      });
+  
+      const followersWithDetails = await Promise.all(sanitizedFollowers);
+  
+      res.status(200).json(followersWithDetails);
+    } catch (err) {
+      console.error("Error:", err);
+      next(err);
+    }
+  };
+  
+
+
+// const getUserFollowers = async (req, res, next) => {
+//     try {
+//         // Get user followers
+//         const user = await User.findOne({ username: req.params.username });
+
+//         if (!user) {
+//             return res.status(404).json({ error: "User not found!" });
+//         }
+
+//         // Extract follower usernames
+//         const followerUsernames = user.followers;
+
+//         // Fetch details for each follower
+//         const followerDetailsPromises = followerUsernames.map(async (followerUsername) => {
+//             const follower = await User.findOne({ username: followerUsername });
+//             return follower;
+//         });
+
+//         // Wait for all follower details to be fetched
+//         const followerDetails = await Promise.all(followerDetailsPromises);
+
+//         // Sanitize and send follower details
+//         const sanitizedFollowers = followerDetails.map(follower => ({
+//             id: follower._id,
+//             username: follower.username,
+//             firstname: follower.firstname,
+//             lastname: follower.lastname,
+//             profilePicture: follower.profilePicture,
+//             email: follower.email,
+//             // Add other details as needed
+//         }));
+
+//         res.status(200).json(sanitizedFollowers);
+//     } catch (err) {
+//         console.error("Error:", err);
+//         next(err);
+//     }
+// };
+
+
+
+
+
+
+export {getUser, updateUser, deleteUser, followUser, unfollowUser, whoToFollow, getUserFollowers};
 

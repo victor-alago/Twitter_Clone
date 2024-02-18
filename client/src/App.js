@@ -5,11 +5,11 @@ import Explore from "./pages/Explore/Explore";
 import Login from "./pages/Login/Login";
 import Signup from "./pages/Signup/Signup";
 import Messages from "./pages/Messages/Messages";
-import Navbar from "./components/navbar/Navbar";
-import Bookmark from "./pages/Bookmark/Bookmark";
+import Navbar from "./components/Navbar/Navbar";
 import Error from "./pages/Error/Error";
 import "./App.css";
 import Tweet from "./pages/Tweet/Tweet";
+import MessageList from "./components/messages/MessageList";
 
 // create a theme for the website
 const Layout = () => {
@@ -20,6 +20,7 @@ const Layout = () => {
     </div>
   );
 };
+
 
 // create router
 const router = createBrowserRouter([
@@ -53,12 +54,8 @@ const router = createBrowserRouter([
         element: <Tweet />,
       },
       {
-        path: "/messages",
-        element: <Messages />,
-      },
-      {
-        path: "/bookmark",
-        element: <Bookmark />,
+        path: "/:username/messages",
+        element: <MessageList />,
       },
       {
         path: "/logout",

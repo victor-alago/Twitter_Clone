@@ -4,7 +4,8 @@ import {getUser,
     deleteUser, 
     followUser, 
     unfollowUser,
-    whoToFollow} from '../services/user.service.js';
+    whoToFollow,
+    getUserFollowers} from '../services/user.service.js';
 import verify from '../verifyToken.js';
 
 const router  = express.Router();
@@ -20,6 +21,8 @@ router.delete('/:username', verify, deleteUser);
 router.put('/follow/:username', verify, followUser);
 // unfollow a user
 router.put('/unfollow/:username', verify, unfollowUser);
+
+router.get('/:username/followers', verify, getUserFollowers);
 
 
 export default router;
