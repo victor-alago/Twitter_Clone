@@ -9,6 +9,7 @@ const tweetSchema = new mongoose.Schema(
         content: {
             type: String,
             required: true,
+            trim : true,
             max: 280,
         },
         media: {

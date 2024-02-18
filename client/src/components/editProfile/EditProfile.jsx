@@ -29,15 +29,15 @@ const EditProfile = ({ setOpen }) => {
   const navigate = useNavigate();
 
   // handle user update
-  const updateUser = () => {
+  const updateUser = async () => {
     try {
-      axios.put(`/users/${currentUser.username}`, {
+      const updateUserProfile = await axios.put(`/users/${currentUser.username}`, {
         profilePicture: img,
         firstname: firstname,
         lastname: lastname,
         bio: bio,
       });
-    //   dispatch(updateProfile(updateUser));
+      dispatch(updateProfile(updateUserProfile));
     } catch (error) {
       console.log(error);
     }
@@ -97,10 +97,10 @@ const EditProfile = ({ setOpen }) => {
   }, [file]);
 
   return (
-    <div className="absolute w-full h-full top-0 left-0 bg-blur flex items-center justify-center">
-      <div className="relative w-[500px] h-[600px] bg-slate-200 rounded-lg p-8 flex flex-col gap-4">
+    <div className="absolute w-full h-full top-0 left-0 bg-blur flex items-center justify-center pt-[100px]">
+      <div className="relative w-[500px] h-[500px] bg-slate-200 rounded-lg p-8 flex flex-col gap-4">
         <button
-          className="absolute top-3 right-3 cursor-pointer text-red-500"
+          className="absolute top-7 right-3 cursor-pointer text-red-500"
           onClick={() => setOpen(false)}
         >
           <CloseRoundedIcon />
@@ -114,26 +114,28 @@ const EditProfile = ({ setOpen }) => {
           type="file"
           className="bg-transparent border border-slate-500 rounded p-2"
           accept="image/*"
-          onChange={(e) => setImg(e.target.files[0])}
+          onChange={(e) => setFile(e.target.files[0])}
         />
 
         <input
           type="text"
           className="bg-transparent border border-slate-500 rounded p-2"
-          placeholder="Firstname"
+          placeholder={currentUser.firstname}
+          required
           onChange={(e) => setFirstname(e.target.value)}
         />
         <input
           type="text"
           className="bg-transparent border border-slate-500 rounded p-2"
-          placeholder="Lastname"
+          placeholder={currentUser.lastname}
+          required
           onChange={(e) => setLastname(e.target.value)}
         />
 
         <input
           type="text"
           className="bg-transparent border border-slate-500 rounded p-2"
-          placeholder="Bio"
+          placeholder={currentUser.bio}
           onChange={(e) => setBio(e.target.value)}
         />
 
@@ -145,14 +147,14 @@ const EditProfile = ({ setOpen }) => {
             Save
           </button>
         </div>
-        <div className="flex justify-end">
+        {/* <div className="flex justify-end">
           <button
             className="bg-red-500 text-white rounded-full px-4 py-2"
             onClick={handleDeleteUser}
           >
             Delete account
           </button>
-        </div>
+        </div> */}
         
       </div>
     </div>

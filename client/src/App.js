@@ -5,13 +5,14 @@ import Explore from "./pages/Explore/Explore";
 import Login from "./pages/Login/Login";
 import Signup from "./pages/Signup/Signup";
 import Messages from "./pages/Messages/Messages";
-import Navbar from "./components/navbar/Navbar";
+import Navbar from './components/navbar/Navbar';
 import Bookmark from "./pages/Bookmark/Bookmark";
 import Error from "./pages/Error/Error";
 import Setting from "./pages/Setting/Setting";
 import AccountSetting from "./pages/Setting/AccountSetting/AccountSetting";
 import "./App.css";
 import Tweet from "./pages/Tweet/Tweet";
+import "./App.css";
 
 // create a theme for the website
 const Layout = () => {

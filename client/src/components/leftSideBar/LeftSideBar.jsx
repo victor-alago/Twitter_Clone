@@ -5,6 +5,7 @@ import { logout } from "../../redux/userSlice";
 import CreateTweetModal from "../createTweetModal/CreateTweetModal";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import HomeIcon from "@mui/icons-material/Home";
 import TagIcon from "@mui/icons-material/Tag";
@@ -16,6 +17,8 @@ import SettingsIcon from '@mui/icons-material/Settings';
 const LeftSideBar = () => {
   const [openModal, setOpenModal] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
+
+  const navigate = useNavigate();
 
   const toggleOptions = () => {
     setShowOptions((prevShowOptions) => !prevShowOptions);
@@ -29,6 +32,8 @@ const LeftSideBar = () => {
   // logout function
   const handleLogout = () => {
     dispatch(logout());
+    navigate("/login");
+
   };
 
   useEffect(() => {
@@ -100,7 +105,7 @@ const LeftSideBar = () => {
             onClick={toggleOptions}
           >
             <img
-              src={userProfile && userProfile.profilePicture ? userProfile.profilePicture : "https://twirpz.files.wordpress.com/2015/06/twitter-avi-gender-balanced-figure.png"}
+              src={currentUser && currentUser.profilePicture ? currentUser.profilePicture : "https://twirpz.files.wordpress.com/2015/06/twitter-avi-gender-balanced-figure.png"}
               alt="Profile"
               className="w-10 h-10 rounded-full object-cover"
             />
