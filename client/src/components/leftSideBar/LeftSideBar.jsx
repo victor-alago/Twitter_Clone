@@ -4,7 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../redux/userSlice";
 import CreateTweetModal from "../createTweetModal/CreateTweetModal";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+
 
 import HomeIcon from "@mui/icons-material/Home";
 import TagIcon from "@mui/icons-material/Tag";
@@ -16,6 +17,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 const LeftSideBar = () => {
   const [openModal, setOpenModal] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
+  const navigate = useNavigate();
 
   const toggleOptions = () => {
     setShowOptions((prevShowOptions) => !prevShowOptions);
@@ -29,6 +31,7 @@ const LeftSideBar = () => {
   // logout function
   const handleLogout = () => {
     dispatch(logout());
+    navigate("/login");
   };
 
   useEffect(() => {
