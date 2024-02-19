@@ -5,20 +5,15 @@ import Explore from "./pages/Explore/Explore";
 import Login from "./pages/Login/Login";
 import Signup from "./pages/Signup/Signup";
 import Messages from "./pages/Messages/Messages";
-// import Explore from "./pages/Explore/Explore";
-// import Login from "./pages/Login/Login";
-// import Signup from "./pages/Signup/Signup";
-// import Messages from "./pages/Messages/Messages";
-import Navbar from "./components/Navbar/Navbar";
-import Bookmark from "./pages/Bookmark/Bookmark";
-// import Trending from "./pages/TrendingPage/TrendingPage";
 import Error from "./pages/Error/Error";
+import Bookmark from "./pages/Bookmark/Bookmark";
 import Setting from "./pages/Setting/Setting";
 import AccountSetting from "./pages/Setting/AccountSetting/AccountSetting";
-import "./App.css";
 import Tweet from "./pages/Tweet/Tweet";
-import MessageList from "./components/messages/MessageList";
 import TrendingPage from "./pages/TrendingPage/TrendingPage";
+import Navbar from "./components/navbar/Navbar";
+import MessageList from "./components/messages/MessageList";
+import "./App.css";
 
 // create a theme for the website
 const Layout = () => {
