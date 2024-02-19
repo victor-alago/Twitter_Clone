@@ -9,14 +9,14 @@ import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import { useNavigate } from "react-router-dom";
 
 const EditProfile = ({ setOpen }) => {
+  const currentUser = useSelector((state) => state.user.currentUser);
   const [file, setFile] = useState(null);
   const [imgUploadProgress, setImgUploadProgress] = useState(0);
   const [bannerFile, setBannerFile] = useState(null);
   const [bannerUploadProgress, setBannerUploadProgress] = useState(0);
-  const [bio, setBio] = useState("");
-  const [firstname, setFirstname] = useState("");
-  const [lastname, setLastname] = useState("");
-  const currentUser = useSelector((state) => state.user.currentUser);
+  const [bio, setBio] = useState(currentUser.bio);
+  const [firstname, setFirstname] = useState(currentUser.firstname);
+  const [lastname, setLastname] = useState(currentUser.lastname);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
