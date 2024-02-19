@@ -4,8 +4,8 @@ import User from "../user/User";
 
 const SearchModal = ({ setOpen, users }) => {
     return (
-        <div className="absolute top-[calc(70px + 10px)] right-0 bg-blur flex items-start justify-end w-[calc(100vw - 20px)]">
-          <div className="relative w-[320px] bg-slate-200 rounded-lg p-8 flex flex-col gap-4">
+        <div className="absolute top-[calc(70px + 10px)] right-0 bg-blur flex items-start justify-end w-[calc(100vw - 20px)] z-[99]">
+          <div className="relative w-[300px] bg-slate-400 rounded-lg p-8 flex justify-center flex-col gap-4">
             <button
               className="absolute top-8 right-3 cursor-pointer text-red-500"
               onClick={() => setOpen(false)}

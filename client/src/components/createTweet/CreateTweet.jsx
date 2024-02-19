@@ -10,11 +10,12 @@ import {
 import { useParams } from "react-router-dom";
 import app from "../../firebase"; 
 import isVideoOrImage from "./fileCheck";
-import InsertPhotoRoundedIcon from '@mui/icons-material/InsertPhotoRounded';
+import InsertPhotoRoundedIcon from "@mui/icons-material/InsertPhotoRounded";
 
 const CreateTweet = () => {
-  const [content, setContent] = useState("");
+  const [content, setContent] = useState(null);
   const [media, setMedia] = useState("");
+  const [error, setError] = useState("");
   const [file, setFile] = useState(null);
   const [mediaUploadProgress, setMediaUploadProgress] = useState(0);
   const { currentUser } = useSelector((state) => state.user);
@@ -46,7 +47,7 @@ const CreateTweet = () => {
     // Create a reference for the file
     const storage = getStorage(app);
     // check if the file given is either a picture or video then create fil
-    const folder = isVideoOrImage(file) === "image" ? "images/" : "videos/"
+    const folder = isVideoOrImage(file) === "image" ? "images/" : "videos/";
     const fileName = new Date().getTime() + file.name;
     const storageRef = ref(storage, folder + fileName);
     const uploadTask = uploadBytesResumable(storageRef, file);
@@ -96,52 +97,68 @@ const CreateTweet = () => {
       // temporary solution
       window.location.reload(false);
     } catch (error) {
-      console.log(error);
+      setError(error.response.data.message);
+      // console.log(error);
     }
   };
 
   return (
     <div className="flex items-start space-x-4 pt-[20px]">
       {currentUser && (
-        <img
-            src={currentUser && currentUser.profilePicture ? currentUser.profilePicture : "https://twirpz.files.wordpress.com/2015/06/twitter-avi-gender-balanced-figure.png"}
-            alt="Profile"
-            className="w-14 h-14 rounded-full object-cover"
-          />
+        <p className="font-bold pl-2 my-2">{currentUser.username}</p>
       )}
-      <form action="" className="flex-1 border-b-2 pb-6 flex flex-col">
-      <textarea
-        className="bg-transparent rounded-lg w-full p-2 text-lg focus:outline-none resize-none"
-        type="text"
-        maxLength={280}
-        placeholder="What is happening?!"
-        onChange={(e) => setContent(e.target.value)}
-      ></textarea>
-
-      {mediaUploadProgress > 0 && (
-        <span>Uploading: {mediaUploadProgress}%</span>
-      )}
-
-      <div className="flex justify-between items-center mt-2">
-        <label htmlFor="mediaInput" className="cursor-pointer text-blue-600 flex items-center">
-          <InsertPhotoRoundedIcon />
-          <input
-            id="mediaInput"
-            type="file"
-            className="hidden"
-            onChange={(e) => setFile(e.target.files[0])}
-          />
-        </label>
-
-        <button
-          className="bg-blue-500 text-white py-2 px-4 rounded-full"
-          onClick={handleSubmit}
+      {error && (
+        <div
+          class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+          role="alert"
         >
-          Tweet
-        </button>
-      </div>
-    </form>
+          <span class="font-medium">{error}</span>
+        </div>
+      )}
+      <form action="" className="border-b-2 pb-6">
+        <textarea
+          className="bg-slate-200 rounded-lg w-full p-2 "
+          type="text"
+          maxLength={280}
+          placeholder="What is happening?"
+          onChange={(e) => {setContent(e.target.value); setError("")}}
+        ></textarea>
 
+        <span>
+          {mediaUploadProgress > 0 && "Uploading: " + mediaUploadProgress + "%"}
+        </span>
+        <div className="flex justify-between">
+          <div>
+            <label htmlFor="mediaInput">
+              <input
+                id="mediaInput"
+                type="file"
+                className="hidden"
+                onChange={(e) => setFile(e.target.files[0])}
+              />
+              <InsertPhotoRoundedIcon className="cursor-pointer text-blue-600" />
+            </label>
+          </div>
+
+          <div>
+            {!content ? (
+              <button
+                className="bg-blue-200 text-white py-2 px-4 rounded-full ml-auto"
+                onClick={(e) => {e.preventDefault(); setError("Content is required!")}}
+              >
+                Tweet
+              </button>
+            ) : (
+              <button
+                className="bg-blue-500 text-white py-2 px-4 rounded-full ml-auto"
+                onClick={handleSubmit}
+              >
+                Tweet
+              </button>
+            )}
+          </div>
+        </div>
+      </form>
     </div>
   );
 };

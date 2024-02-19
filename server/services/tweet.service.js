@@ -5,6 +5,10 @@ import handleError from "../error.js";
 // create a tweet
 const createTweet = async (req, res, next) => {
   const username = req.user.username;
+  const content = req.body.content;
+  if(!content){
+    return next(handleError(400, "Content is required!"));
+  };
   // const content = req.body.content;
   const newTweet = new Tweet({ username, ...req.body });
   try {
@@ -16,27 +20,70 @@ const createTweet = async (req, res, next) => {
 };
 
 // get a tweet
+// const getTweet = async (req, res, next) => {
+//   const comments = [];
+//   try {
+//     // get tweet
+//     const tweet = await Tweet.find({ _id: req.params.id });
+//     // get all comments on that tweet
+//     if (!tweet[0].comments) {
+//       return res.status(200).json(tweet);
+//     } else {
+//       const tweetComments = await Promise.all(
+//         tweet[0].comments.map((commentId) => {
+
+//           return Tweet.find({ _id: commentId });
+//         })
+
+//       );
+//     comments.push(tweetComments);
+//       // return tweet and comments
+//       res.status(200).json(tweet.concat(...comments));
+//     }
+//   } catch (err) {
+//     console.log(err);
+//     return next(handleError(500, err.message));
+//   }
+// };
+
 const getTweet = async (req, res, next) => {
   try {
-    // get tweet
+    // Get tweet
     const tweet = await Tweet.find({ _id: req.params.id });
-    // get all comments on that tweet
-    if (!tweet[0].comments) {
-      return res.status(200).json(tweet);
-    } else {
+
+    // Check if tweet exists
+    if (!tweet[0]) {
+      return res.status(404).json({ message: "Tweet not found" });
+    }
+
+    // Check if tweet has comments
+    if (tweet[0].comments && tweet[0].comments.length > 0) {
+      // Fetch all comments on the tweet
       const tweetComments = await Promise.all(
         tweet[0].comments.map((commentId) => {
           return Tweet.find({ _id: commentId });
         })
       );
-      // return tweet and comments
-      res.status(200).json(tweet.concat(...tweetComments));
+
+      // Extract comment objects
+      const comments = tweetComments.map(comment => comment[0]);
+
+      // Create the desired format: [{ mainTweet }, [ { comment1 }, { comment2 } ]]
+      const formattedTweet = [tweet[0], comments];
+      
+      // Return the formatted tweet
+      res.status(200).json(formattedTweet);
+    } else {
+      // If tweet has no comments, return only the main tweet
+      res.status(200).json([tweet[0], []]);
     }
   } catch (err) {
     console.log(err);
     return next(handleError(500, err.message));
   }
 };
+
+
 
 //delete tweet
 const deleteTweet = async (req, res, next) => {
@@ -204,8 +251,8 @@ const getBookmarkedTweets = async (req, res, next) => {
 const getTrending = async (req, res, next) => {
   try {
     // Decode the hashtag from the URL parameter
-    // You hqve to decode it because it is encoded in the frontend
-    const hashtag = decodeURIComponent(req.params.word);
+    // You have to decode it because it is encoded in the frontend
+    const hashtag = decodeURIComponent(req.params.tag);
 
     // get only tweets with likes, sort by highest likes
     const exploreTweets = await Tweet.find({
@@ -216,8 +263,48 @@ const getTrending = async (req, res, next) => {
     res.status(200).json(exploreTweets);
   } catch (err) {
     console.log(err);
-    return next(handleError(500, "There are no tweets!"));
+    return next(handleError(500, "There are no tweets with this hashtag!"));
   }
+};
+
+
+const getTrendingTags = async (req, res, next) => {
+try {
+  // get only tweets with hashtags, sort by highest likes
+  const exploreTweets = await Tweet.find({
+    content: { $regex: "#", $options: "i" },
+  });
+
+  // initialize empty array to store hashtags
+  const hashtags = [];
+
+  // get all hashtags from tweets
+  exploreTweets.forEach((tweet) => {
+    const tweetHashtags = tweet.content.match(/#\w+/g);
+    if (tweetHashtags) {
+      hashtags.push(...tweetHashtags);
+    }
+  });
+
+  // count the frequency of each hashtag
+  const tagCounts = {};
+
+  hashtags.forEach((tag) => {
+    if(tagCounts[tag]){
+      tagCounts[tag]++;
+    } else {
+      tagCounts[tag] = 1;
+    }
+  });
+
+  // convert object to array
+  const trendsArray = Object.entries(tagCounts).map(([key, value]) => ({ key, value }));
+  // return users tweets
+  res.status(200).json(trendsArray);
+} catch (err) {
+  console.log(err);
+  return next(handleError(500, "There are no tweets with hashtags!"));
+}
 };
 
 
@@ -233,5 +320,6 @@ export {
   getExploreTweets,
   bookmarkTweet,
   getTimelineTweets,
-  getBookmarkedTweets
+  getBookmarkedTweets,
+  getTrendingTags,
 };

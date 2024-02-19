@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import SearchModal from "../searchResultsModal/SearchResultsModal";
+import TrendingHashtags from "../trendingHashtags/TrendingHashtags";
 // import SearchedUsers from "../searchUsers/SearchUsers";
 import axios from "axios";
 
@@ -31,7 +32,7 @@ const RightSideBar = () => {
 
   return (
     <>
-      <div>
+      <div className="mt-10">
         <form onSubmit={handleSubmit}>
           <div className="px-0 md:px-6 mx-auto">
             <SearchIcon className="absolute m-2" />
@@ -50,6 +51,10 @@ const RightSideBar = () => {
         <SearchModal setOpen={setOpenModal} users={searchResults} />
       )}
 
+      <div className="mt-8">
+        <TrendingHashtags />
+      </div>
+
       
     </>
   );
@@ -57,45 +62,3 @@ const RightSideBar = () => {
 
 export default RightSideBar;
 
-// import React, { useState, useEffect } from "react";
-// import SearchUser from "../searchUsers/SearchUsers";
-// import SearchResultsModal from "../searchResultsModal/SearchResultsModal";
-// import axios from "axios";
-
-// const RightSideBar = () => {
-//   const [searchResults, setSearchResults] = useState([]);
-//   const [showModal, setShowModal] = useState(false);
-
-//   const handleSearch = async (searchTerm) => {
-//     try {
-//       const res = await axios.get(`/users/find/${searchTerm}`);
-//       setSearchResults(res.data);
-//     } catch (err) {
-//       console.log(err);
-//     }
-//   };
-
-//   useEffect(() => {
-//     if (searchResults.length > 0) {
-//       setShowModal(true);
-//     }
-//   }, [searchResults]);
-
-//   const handleCloseModal = () => {
-//     setShowModal(false);
-//   };
-
-//   return (
-//     <div>
-//       <SearchUser handleSearch={handleSearch} />
-//       {showModal && (
-//         <SearchResultsModal
-//           results={searchResults}
-//           handleClose={handleCloseModal}
-//         />
-//       )}
-//     </div>
-//   );
-// };
-
-// export default RightSideBar;
