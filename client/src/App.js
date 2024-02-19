@@ -75,10 +75,6 @@ const router = createBrowserRouter([
         element: <TrendingPage />,
       },
       {
-        path: "/bookmark",
-        element: <Bookmark />,
-      },
-      {
         path: "/setting",
         element: <Outlet />, // Use Outlet here since Layout is already wrapping it
         children: [
