@@ -12,8 +12,9 @@ import isVideoOrImage from "./fileCheck";
 import InsertPhotoRoundedIcon from "@mui/icons-material/InsertPhotoRounded";
 
 const CreateTweet = () => {
-  const [content, setContent] = useState("");
+  const [content, setContent] = useState(null);
   const [media, setMedia] = useState("");
+  const [error, setError] = useState("");
   const [file, setFile] = useState(null);
   const [mediaUploadProgress, setMediaUploadProgress] = useState(0);
   const { currentUser } = useSelector((state) => state.user);
@@ -77,7 +78,8 @@ const CreateTweet = () => {
       // temporary solution
       window.location.reload(false);
     } catch (error) {
-      console.log(error);
+      setError(error.response.data.message);
+      // console.log(error);
     }
   };
 
@@ -86,13 +88,21 @@ const CreateTweet = () => {
       {currentUser && (
         <p className="font-bold pl-2 my-2">{currentUser.username}</p>
       )}
+      {error && (
+        <div
+          class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+          role="alert"
+        >
+          <span class="font-medium">{error}</span>
+        </div>
+      )}
       <form action="" className="border-b-2 pb-6">
         <textarea
           className="bg-slate-200 rounded-lg w-full p-2 "
           type="text"
           maxLength={280}
           placeholder="What is happening?"
-          onChange={(e) => setContent(e.target.value)}
+          onChange={(e) => {setContent(e.target.value); setError("")}}
         ></textarea>
 
         <span>
@@ -112,12 +122,21 @@ const CreateTweet = () => {
           </div>
 
           <div>
-            <button
-              className="bg-blue-500 text-white py-2 px-4 rounded-full ml-auto"
-              onClick={handleSubmit}
-            >
-              Tweet
-            </button>
+            {!content ? (
+              <button
+                className="bg-blue-200 text-white py-2 px-4 rounded-full ml-auto"
+                onClick={(e) => {e.preventDefault(); setError("Content is required!")}}
+              >
+                Tweet
+              </button>
+            ) : (
+              <button
+                className="bg-blue-500 text-white py-2 px-4 rounded-full ml-auto"
+                onClick={handleSubmit}
+              >
+                Tweet
+              </button>
+            )}
           </div>
         </div>
       </form>

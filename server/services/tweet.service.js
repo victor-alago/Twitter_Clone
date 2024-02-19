@@ -5,6 +5,10 @@ import handleError from "../error.js";
 // create a tweet
 const createTweet = async (req, res, next) => {
   const username = req.user.username;
+  const content = req.body.content;
+  if(!content){
+    return next(handleError(400, "Content is required!"));
+  };
   // const content = req.body.content;
   const newTweet = new Tweet({ username, ...req.body });
   try {
