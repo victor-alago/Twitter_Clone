@@ -175,7 +175,7 @@ const Tweet = ({ tweet, setData }) => {
               ))}
           </div>
 
-          <div className="">
+          <div className="flex justify-between">
             <button onClick={handleLikeUnlike} className="mr-10 my-2">
               {tweet.likes.includes(currentUser.username) ? (
                 <FavoriteIcon className="cursor-pointer" />

@@ -11,12 +11,14 @@ import Messages from "./pages/Messages/Messages";
 // import Messages from "./pages/Messages/Messages";
 import Navbar from "./components/Navbar/Navbar";
 import Bookmark from "./pages/Bookmark/Bookmark";
+// import Trending from "./pages/TrendingPage/TrendingPage";
 import Error from "./pages/Error/Error";
 import Setting from "./pages/Setting/Setting";
 import AccountSetting from "./pages/Setting/AccountSetting/AccountSetting";
 import "./App.css";
 import Tweet from "./pages/Tweet/Tweet";
 import MessageList from "./components/messages/MessageList";
+import TrendingPage from "./pages/TrendingPage/TrendingPage";
 
 // create a theme for the website
 const Layout = () => {
@@ -66,8 +68,16 @@ const router = createBrowserRouter([
         element: <Tweet />,
       },
       {
-        path: "/:username/messages",
-        element: <MessageList />,
+        path: "/messages",
+        element: <Messages />,
+      },
+      {
+        path: "/bookmark",
+        element: <Bookmark />,
+      },
+      {
+        path: "/trending/:tag/tweets",
+        element: <TrendingPage />,
       },
       {
         path: "/setting",

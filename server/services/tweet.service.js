@@ -204,8 +204,8 @@ const getBookmarkedTweets = async (req, res, next) => {
 const getTrending = async (req, res, next) => {
   try {
     // Decode the hashtag from the URL parameter
-    // You hqve to decode it because it is encoded in the frontend
-    const hashtag = decodeURIComponent(req.params.word);
+    // You have to decode it because it is encoded in the frontend
+    const hashtag = decodeURIComponent(req.params.tag);
 
     // get only tweets with likes, sort by highest likes
     const exploreTweets = await Tweet.find({
@@ -216,8 +216,48 @@ const getTrending = async (req, res, next) => {
     res.status(200).json(exploreTweets);
   } catch (err) {
     console.log(err);
-    return next(handleError(500, "There are no tweets!"));
+    return next(handleError(500, "There are no tweets with this hashtag!"));
   }
+};
+
+
+const getTrendingTags = async (req, res, next) => {
+try {
+  // get only tweets with hashtags, sort by highest likes
+  const exploreTweets = await Tweet.find({
+    content: { $regex: "#", $options: "i" },
+  });
+
+  // initialize empty array to store hashtags
+  const hashtags = [];
+
+  // get all hashtags from tweets
+  exploreTweets.forEach((tweet) => {
+    const tweetHashtags = tweet.content.match(/#\w+/g);
+    if (tweetHashtags) {
+      hashtags.push(...tweetHashtags);
+    }
+  });
+
+  // count the frequency of each hashtag
+  const tagCounts = {};
+
+  hashtags.forEach((tag) => {
+    if(tagCounts[tag]){
+      tagCounts[tag]++;
+    } else {
+      tagCounts[tag] = 1;
+    }
+  });
+
+  // convert object to array
+  const trendsArray = Object.entries(tagCounts).map(([key, value]) => ({ key, value }));
+  // return users tweets
+  res.status(200).json(trendsArray);
+} catch (err) {
+  console.log(err);
+  return next(handleError(500, "There are no tweets with hashtags!"));
+}
 };
 
 
@@ -233,5 +273,6 @@ export {
   getExploreTweets,
   bookmarkTweet,
   getTimelineTweets,
-  getBookmarkedTweets
+  getBookmarkedTweets,
+  getTrendingTags,
 };

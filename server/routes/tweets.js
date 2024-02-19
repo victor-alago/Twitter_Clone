@@ -10,7 +10,8 @@ import {createTweet,
     getTrending,
     bookmarkTweet,
     getBookmarkedTweets,
-    retweetUnretweet} from '../services/tweet.service.js';
+    retweetUnretweet,
+    getTrendingTags} from '../services/tweet.service.js';
 import verify from '../verifyToken.js';
 
 const router = express.Router();
@@ -48,7 +49,10 @@ router.get("/:username/tweets", verify, getUserTweets);
 // get all tweets
 router.get('/explore', verify, getExploreTweets);
 
+// get trending tags list
+router.get('/trending/', verify, getTrendingTags);
+
 // get trending hashtags
-router.get("/search/:word", verify, getTrending);
+router.get("/trending/:tag/tweets", verify, getTrending);
 
 export default router;
