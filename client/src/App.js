@@ -9,7 +9,7 @@ import Messages from "./pages/Messages/Messages";
 // import Login from "./pages/Login/Login";
 // import Signup from "./pages/Signup/Signup";
 // import Messages from "./pages/Messages/Messages";
-import Navbar from "./components/Navbar/Navbar";
+import Navbar from "./components/navbar/Navbar";
 import Bookmark from "./pages/Bookmark/Bookmark";
 // import Trending from "./pages/TrendingPage/TrendingPage";
 import Error from "./pages/Error/Error";

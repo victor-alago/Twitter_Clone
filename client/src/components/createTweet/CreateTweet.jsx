@@ -7,9 +7,9 @@ import {
   uploadBytesResumable,
   getDownloadURL,
 } from "firebase/storage";
-import app from "../../firebase"; 
+import app from "../../firebase";
 import isVideoOrImage from "./fileCheck";
-import InsertPhotoRoundedIcon from '@mui/icons-material/InsertPhotoRounded';
+import InsertPhotoRoundedIcon from "@mui/icons-material/InsertPhotoRounded";
 
 const CreateTweet = () => {
   const [content, setContent] = useState("");
@@ -27,7 +27,7 @@ const CreateTweet = () => {
     // Create a reference for the file
     const storage = getStorage(app);
     // check if the file given is either a picture or video then create fil
-    const folder = isVideoOrImage(file) === "image" ? "images/" : "videos/"
+    const folder = isVideoOrImage(file) === "image" ? "images/" : "videos/";
     const fileName = new Date().getTime() + file.name;
     const storageRef = ref(storage, folder + fileName);
     const uploadTask = uploadBytesResumable(storageRef, file);
@@ -98,23 +98,27 @@ const CreateTweet = () => {
         <span>
           {mediaUploadProgress > 0 && "Uploading: " + mediaUploadProgress + "%"}
         </span>
-        <label htmlFor="mediaInput">
-          <input
-            id="mediaInput"
-            type="file"
-            className="hidden"
-            onChange={(e) => setFile(e.target.files[0])}
-          />
-          <InsertPhotoRoundedIcon className="cursor-pointer text-blue-600"/>
-        </label>
+        <div className="flex justify-between">
+          <div>
+            <label htmlFor="mediaInput">
+              <input
+                id="mediaInput"
+                type="file"
+                className="hidden"
+                onChange={(e) => setFile(e.target.files[0])}
+              />
+              <InsertPhotoRoundedIcon className="cursor-pointer text-blue-600" />
+            </label>
+          </div>
 
-        <div>
-          <button
-            className="bg-blue-500 text-white py-2 px-4 rounded-full ml-auto"
-            onClick={handleSubmit}
-          >
-            Tweet
-          </button>
+          <div>
+            <button
+              className="bg-blue-500 text-white py-2 px-4 rounded-full ml-auto"
+              onClick={handleSubmit}
+            >
+              Tweet
+            </button>
+          </div>
         </div>
       </form>
     </div>
