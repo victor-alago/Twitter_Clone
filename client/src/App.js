@@ -63,7 +63,7 @@ const router = createBrowserRouter([
         element: <Tweet />,
       },
       {
-        path: "/messages",
+        path: "/:username/messages",
         element: <Messages />,
       },
       {
