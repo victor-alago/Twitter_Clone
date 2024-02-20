@@ -28,7 +28,7 @@ const joinRoom = () => {
 
     return (
         <>
-          <div className="grid grid-cols-1 md:grid-cols-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 pt-[70px]">
             <div className="px-6">
               <LeftSideBar />
             </div>
