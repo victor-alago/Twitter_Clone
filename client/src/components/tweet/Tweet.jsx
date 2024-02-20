@@ -28,6 +28,9 @@ const Tweet = ({ tweet, setData }) => {
   // get the username from the url
   const { username } = useParams();
 
+
+  const [isBookmarked, setIsBookmarked] = useState(tweet.bookmarks.includes(currentUser.username));
+
   // useEffect to get the user data from the tweet
   useEffect(() => {
     // function to get the user data from the tweet
@@ -100,6 +103,7 @@ const Tweet = ({ tweet, setData }) => {
 
   // function to handle the bookmark of a tweet
   const handleBookmark = async () => {
+    setIsBookmarked(!isBookmarked);
     try {
       // bookmark tweet or remove the tweet from bookmarks
       await axios.put(`/tweets/${tweet._id}/bookmark`);
@@ -113,12 +117,16 @@ const Tweet = ({ tweet, setData }) => {
         const newData = await axios.get(`/tweets/explore/`);
         setData(newData.data);
         // if the location is the timeline page, get the timeline tweets
+      } else if (location.includes("bookmark")) {
+        const newData = await axios.get('/bookmarks');
+        setData(newData.data);
       } else {
         const newData = await axios.get(`/tweets/timeline`);
         setData(newData.data);
       }
     } catch (error) {
       console.log(error);
+      setIsBookmarked(!isBookmarked);
     }
   };
 
@@ -202,7 +210,7 @@ const Tweet = ({ tweet, setData }) => {
             </Link>
 
             <button onClick={handleBookmark} className="mr-10 my-2">
-              {tweet.bookmarks.includes(currentUser.username) ? (
+              {isBookmarked ? (
                 <BookmarkIcon />
               ) : (
                 <BookmarkBorderIcon />
