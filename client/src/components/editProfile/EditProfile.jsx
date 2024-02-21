@@ -23,15 +23,20 @@ const EditProfile = ({ setOpen }) => {
 
   const updateUser = async (profilePictureUrl, bannerPictureUrl) => {
     try {
+      // Initialize an object to hold the updates
+      let updates = {};
+  
+      // Only add fields to the updates object if they have a non-empty value
+      if (profilePictureUrl) updates.profilePicture = profilePictureUrl;
+      if (bannerPictureUrl) updates.bannerPicture = bannerPictureUrl;
+      if (firstname.trim()) updates.firstname = firstname;
+      if (lastname.trim()) updates.lastname = lastname;
+      if (bio.trim()) updates.bio = bio;
+  
+      // Make the PUT request with the updates object
       const updatedUserResponse = await axios.put(
         `/users/${currentUser.username}`,
-        {
-          profilePicture: profilePictureUrl,
-          bannerPicture: bannerPictureUrl, // Include bannerPicture in the update
-          firstname: firstname,
-          lastname: lastname,
-          bio: bio,
-        },
+        updates, // Pass the updates object
         {
           headers: {
             Authorization: `Bearer ${currentUser.token}`, // Adjust based on how you store and use tokens
@@ -39,14 +44,12 @@ const EditProfile = ({ setOpen }) => {
         }
       );
   
+      // Update the Redux store with the response data
       const updatedUserData = updatedUserResponse.data;
       dispatch(
         updateProfile({
-          profilePicture: updatedUserData.profilePicture,
-          bannerPicture: updatedUserData.bannerPicture, // Dispatch bannerPicture update
-          firstname: updatedUserData.firstname,
-          lastname: updatedUserData.lastname,
-          bio: updatedUserData.bio,
+          ...currentUser,
+          ...updates, // Use the updates object to ensure only updated fields are passed
         })
       );
   
@@ -56,7 +59,9 @@ const EditProfile = ({ setOpen }) => {
       console.error("Failed to update user profile:", error);
       // Handle the error, e.g., through a notification to the user
     }
-  };  
+  };
+  
+    
 
   const handleSave = async () => {
     let profilePictureUrl = currentUser.profilePicture;

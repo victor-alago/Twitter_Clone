@@ -30,12 +30,8 @@ const MessageList = () => {
 
   return (
     <>
-
     <div className="grid grid-cols-1 md:grid-cols-4">
-         <div className="px-6">
-             <LeftSideBar />
-        </div>
-        <div className="bg-white p-4 rounded shadow col-span-2">
+        <div className="bg-white p-4 rounded shadow col-span-4">
             <i className="">Have no conversations yet? Message any of your followers now!!</i>
             <br></br>
             <h2 className="text-2xl font-semibold mb-4">Your Followers</h2>

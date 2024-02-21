@@ -267,6 +267,7 @@ const Profile = () => {
               )}
 
 
+
                 {activeTab === 'likes' && (
                   <div className="likes">
                     {/* Map through likes and render them */}

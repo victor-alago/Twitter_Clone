@@ -7,21 +7,47 @@ import {
   uploadBytesResumable,
   getDownloadURL,
 } from "firebase/storage";
-import app from "../../firebase";
+import { useParams } from "react-router-dom";
+import app from "../../firebase"; 
 import isVideoOrImage from "./fileCheck";
 import InsertPhotoRoundedIcon from "@mui/icons-material/InsertPhotoRounded";
+import { Link } from "react-router-dom";
+import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon'; // Import the emoji icon
+import EmojiPicker from 'emoji-picker-react';
+
+
+
 
 const CreateTweet = () => {
-  const [content, setContent] = useState(null);
   const [media, setMedia] = useState("");
   const [error, setError] = useState("");
   const [file, setFile] = useState(null);
   const [mediaUploadProgress, setMediaUploadProgress] = useState(0);
   const { currentUser } = useSelector((state) => state.user);
+  const [userProfile, setUserProfile] = useState(null);
+  const { username } = useParams();
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [content, setContent] = useState('');
+
 
   useEffect(() => {
     file && uploadMedia(file);
   }, [file]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Get user profile
+        const userProfile = await axios.get(`/users/find/${username}`);
+        setUserProfile(userProfile.data);
+
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    fetchData();
+  }, [currentUser, username]);
 
   // handle media upload
   const uploadMedia = (file) => {
@@ -83,64 +109,86 @@ const CreateTweet = () => {
     }
   };
 
+
+  const onEmojiClick = (emojiData, event) => {
+    setContent(prevContent => prevContent + emojiData.emoji);
+  };
+  
+  
   return (
-    <div>
-      {currentUser && (
-        <p className="font-bold pl-2 my-2">{currentUser.username}</p>
-      )}
-      {error && (
-        <div
-          class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-          role="alert"
-        >
-          <span class="font-medium">{error}</span>
-        </div>
-      )}
-      <form action="" className="border-b-2 pb-6">
-        <textarea
-          className="bg-slate-200 rounded-lg w-full p-2 "
-          type="text"
-          maxLength={280}
-          placeholder="What is happening?"
-          onChange={(e) => {setContent(e.target.value); setError("")}}
-        ></textarea>
-
-        <span>
-          {mediaUploadProgress > 0 && "Uploading: " + mediaUploadProgress + "%"}
-        </span>
-        <div className="flex justify-between">
-          <div>
-            <label htmlFor="mediaInput">
-              <input
-                id="mediaInput"
-                type="file"
-                className="hidden"
-                onChange={(e) => setFile(e.target.files[0])}
-              />
-              <InsertPhotoRoundedIcon className="cursor-pointer text-blue-600" />
-            </label>
-          </div>
-
-          <div>
-            {!content ? (
-              <button
-                className="bg-blue-200 text-white py-2 px-4 rounded-full ml-auto"
-                onClick={(e) => {e.preventDefault(); setError("Content is required!")}}
-              >
-                Tweet
-              </button>
-            ) : (
-              <button
-                className="bg-blue-500 text-white py-2 px-4 rounded-full ml-auto"
-                onClick={handleSubmit}
-              >
-                Tweet
-              </button>
-            )}
-          </div>
-        </div>
-      </form>
+<div className="flex items-start space-x-4 pt-[20px] w-full">
+  {currentUser && (
+    <Link to={`/profile/${currentUser.username}`}>
+    <img
+      src={currentUser.profilePicture ? currentUser.profilePicture : "https://twirpz.files.wordpress.com/2015/06/twitter-avi-gender-balanced-figure.png"}
+      alt="Profile"
+      className="w-14 h-14 rounded-full object-cover"
+    />
+    </Link>
+  )}
+  {error && (
+    <div
+      className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 flex-1"
+      role="alert"
+    >
+      <span className="font-medium">{error}</span>
     </div>
+  )}
+  <form action="" className="flex-1 border-b-2 pb-6 w-full">
+    <textarea
+      className="bg-transparent resize-none rounded-lg w-full p-2 focus:outline-none "
+      type="text"
+      maxLength={280}
+      placeholder="What is happening?"
+      value={content}
+      onChange={(e) => {setContent(e.target.value); setError("")}}
+    ></textarea>
+
+    <span>
+      {mediaUploadProgress > 0 && "Uploading: " + mediaUploadProgress + "%"}
+    </span>
+    <div className="flex justify-between">
+      <div>
+        <label htmlFor="mediaInput">
+          <input
+            id="mediaInput"
+            type="file"
+            className="hidden"
+            onChange={(e) => setFile(e.target.files[0])}
+          />
+          <InsertPhotoRoundedIcon className="cursor-pointer text-blue-600" />
+        </label>
+
+        <button type="button" className="cursor-pointer text-blue-600" onClick={() => setShowEmojiPicker(!showEmojiPicker)}>
+          <InsertEmoticonIcon />
+        </button>
+
+        {showEmojiPicker && <div className="absolute"><EmojiPicker onEmojiClick={onEmojiClick} /></div>}
+      </div>
+
+
+
+      <div>
+        {!content ? (
+          <button
+            className="bg-blue-200 text-white py-2 px-4 rounded-full ml-auto"
+            onClick={(e) => {e.preventDefault(); setError("Content is required!")}}
+          >
+            Tweet
+          </button>
+        ) : (
+          <button
+            className="bg-blue-500 text-white py-2 px-4 rounded-full ml-auto"
+            onClick={handleSubmit}
+          >
+            Tweet
+          </button>
+        )}
+      </div>
+    </div>
+  </form>
+</div>
+
   );
 };
 
