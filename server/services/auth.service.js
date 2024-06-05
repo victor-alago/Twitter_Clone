@@ -1,110 +1,91 @@
-import User from "../models/User.js";
-// import bcrypt from "bcryptjs";
-import CryptoJS from "crypto-js";
-import jwt from "jsonwebtoken";
-import handleError from "../error.js";
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import User from '../models/User.js';
+import handleError from '../error.js';
+import { neo4jDriver } from '../db.js';
 
+// Signup function
+const signup = async (req, res) => {
+    const { firstname, lastname, username, email, password } = req.body;
 
-const signup =  async (req, res) => {
-    // get user data from request body
-    const {firstname, lastname, username, email, password} = req.body;
+    if (!firstname || !lastname || !username || !email || !password) {
+        return res.status(400).json({ error: 'Missing information' });
+    }
 
-    // check if all required fields are submitted
-    if (!firstname || !lastname || !username || !email || !password){
-        return res.status(400).json({error: "missing information"});
-    };
+    const userExists = await User.findOne({ email: email });
+    if (userExists) {
+        return res.status(400).json({ error: 'User already exists, please login.' });
+    }
 
-    // check if user already exists
-    const user = await User.findOne({email: email});
-    if (user){
-        return res.status(400).json({error: "User already exists, please login."})
-    };
+    const saltRounds = 10; // Salt rounds for bcrypt
+    const passwordHash = await bcrypt.hash(password, saltRounds);
 
-    // hash password
-    const passwordHash = CryptoJS.AES.encrypt(
-        password, process.env.SECRET_KEY
-    ).toString();
+    try {
+        const newUser = new User({ firstname, lastname, username, email, password: passwordHash });
+        const savedUser = await newUser.save();
 
-    try{
-        // create new user
-        const newUser = new User({firstname, lastname, username, email, password: passwordHash});
-        // save user and return response
-        const user = await newUser.save();
+        const session = neo4jDriver.session();
+        try {
+            await session.run(
+                'CREATE (u:User {id: $id, firstname: $firstname, lastname: $lastname, username: $username, email: $email})',
+                { id: savedUser._id.toString(), firstname, lastname, username, email }
+            );
+        } finally {
+            await session.close();
+        }
 
-        // create jwt token
         const token = jwt.sign(
-            {id:user._id, username:user.username},
+            { id: savedUser._id, username: savedUser.username },
             process.env.SECRET_KEY,
-            {expiresIn: "2h"});
+            { expiresIn: '2h' }
+        );
 
-        // destructure user object to remove password
-        const {password, ...info} = user._doc;
-        // console.log(info);
-        
-        // return response with status, user info, access token and cookie
+        const { password, ...info } = savedUser._doc;
+
         return res
-        .cookie("token", token, {httpOnly: true})
-        .status(200)
-        .json({...info, token});
-s
-    } catch(err){
-        console.log(err)
-        return res.status(500).json({error: "Failed to save user."})
+            .cookie('token', token, { httpOnly: true })
+            .status(200)
+            .json({ ...info, token });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({ error: 'Failed to save user.' });
     }
 };
-  
-  
 
- //login
-const login = async (req, res, next) =>{
-  //get data from form
-  const {email, userPassword} = req.body;
+// Login function
+const login = async (req, res, next) => {
+    const { email, userPassword } = req.body;
 
-  // check if all required fields are submitted
-  if (!email || !userPassword){
-      // next(handleError(400, "Missing information"));
-      return res.status(400).json({error: "Missing information"});
-  }
+    if (!email || !userPassword) {
+        return res.status(400).json({ error: 'Missing information' });
+    }
 
-  try{
-      //check database for the user with the email
-      const user = await User.findOne({email});
-      // if user does not exist
-      if (!user){
-          // next(handleError(401, "User not found!"));
-          return res.status(401).json({error: "User not found!"});
-      } 
-      else{
-          // if user exists
-          // decrypt database password
-          const bytes = CryptoJS.AES.decrypt(user.password, process.env.SECRET_KEY);
-          // convert it back to string
-          const originalPassword = bytes.toString(CryptoJS.enc.Utf8);
-          // check if passwords match
-          if (userPassword !== originalPassword){
-              // next(handleError(401, "Wrong credentials"));
-              return res.status(401).json({error: "Wrong credentials"});
-          }
+    try {
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(401).json({ error: 'User not found!' });
+        }
 
-          // create jwt token
-          const token = jwt.sign(
-              {id:user._id, username:user.username},
-              process.env.SECRET_KEY,
-              {expiresIn: "2h"})
+        const match = await bcrypt.compare(userPassword, user.password);
+        if (!match) {
+            return res.status(401).json({ error: 'Wrong credentials' });
+        }
 
-          // destructure user object to remove password
-          const {password, ...info} = user._doc;
-          
-          // return response with status, user info, access token and cookie
-          return res.cookie("token", token, {httpOnly: true})
-          .status(200)
-          .json({...info, token});
-      };
-  }catch(err){
-      console.log(err);
-      // next(handleError(500, "Failed to login"));
-      return res.status(500).json({error: "Failed to login."});
-  };
+        const token = jwt.sign(
+            { id: user._id, username: user.username },
+            process.env.SECRET_KEY,
+            { expiresIn: '2h' }
+        );
+
+        const { password, ...info } = user._doc;
+
+        return res.cookie('token', token, { httpOnly: true })
+            .status(200)
+            .json({ ...info, token });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({ error: 'Failed to login.' });
+    }
 };
 
 export { signup, login };
